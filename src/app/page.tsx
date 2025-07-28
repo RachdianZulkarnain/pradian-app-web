@@ -7,7 +7,6 @@ import Newest from "@/components/Newest";
 export default function Home() {
   return (
     <main>
-      <Header />
       <Hero />
       <Category />
       <Newest />

@@ -14,9 +14,8 @@ const Category = () => {
       <h3 className="mb-6 text-3xl font-semibold">Category Event</h3>
 
       <div className="grid grid-cols-3 gap-4 md:flex md:snap-x md:snap-mandatory md:justify-center md:gap-40 md:overflow-x-auto md:pb-2">
-        {/* Music */}
         <div className="flex snap-start flex-col items-center text-center md:min-w-[80px]">
-          <Link href="/music">
+          <Link href="/events">
             <div className="mb-2 flex h-[90px] w-[90px] items-center justify-center rounded-full border border-gray-300 transition hover:scale-105">
               <Music size={35} />
             </div>
@@ -24,9 +23,8 @@ const Category = () => {
           </Link>
         </div>
 
-        {/* Nightlife */}
         <div className="flex snap-start flex-col items-center text-center md:min-w-[80px]">
-          <Link href="/nightlife">
+          <Link href="/events">
             <div className="mb-2 flex h-[90px] w-[90px] items-center justify-center rounded-full border border-gray-300 transition hover:scale-105">
               <Moon size={35} />
             </div>
@@ -34,9 +32,8 @@ const Category = () => {
           </Link>
         </div>
 
-        {/* Arts */}
         <div className="flex snap-start flex-col items-center text-center md:min-w-[80px]">
-          <Link href="/arts">
+          <Link href="/events">
             <div className="mb-2 flex h-[90px] w-[90px] items-center justify-center rounded-full border border-gray-300 transition hover:scale-105">
               <Paintbrush size={35} />
             </div>
@@ -44,9 +41,8 @@ const Category = () => {
           </Link>
         </div>
 
-        {/* Food */}
         <div className="flex snap-start flex-col items-center text-center md:min-w-[80px]">
-          <Link href="/food">
+          <Link href="/events">
             <div className="mb-2 flex h-[90px] w-[90px] items-center justify-center rounded-full border border-gray-300 transition hover:scale-105">
               <Utensils size={35} />
             </div>
@@ -54,9 +50,8 @@ const Category = () => {
           </Link>
         </div>
 
-        {/* Business */}
         <div className="flex snap-start flex-col items-center text-center md:min-w-[80px]">
-          <Link href="/business">
+          <Link href="/events">
             <div className="mb-2 flex h-[90px] w-[90px] items-center justify-center rounded-full border border-gray-300 transition hover:scale-105">
               <Briefcase size={35} />
             </div>
@@ -64,9 +59,8 @@ const Category = () => {
           </Link>
         </div>
 
-        {/* Dating */}
         <div className="flex snap-start flex-col items-center text-center md:min-w-[80px]">
-          <Link href="/dating">
+          <Link href="/events">
             <div className="mb-2 flex h-[90px] w-[90px] items-center justify-center rounded-full border border-gray-300 transition hover:scale-105">
               <Heart size={35} />
             </div>
