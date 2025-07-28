@@ -2,6 +2,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Newest = () => {
@@ -53,12 +54,12 @@ const Newest = () => {
     <section className="container mx-auto mt-12 p-4 py-4 md:px-8 lg:px-0">
       <div className="mb-6 flex items-center justify-between">
         <h3 className="text-3xl font-semibold">Newest Event</h3>
-        {/* <Link
+        <Link
           href="/events"
           className="text-sm text-orange-400 hover:underline"
         >
           See all
-        </Link> */}
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
