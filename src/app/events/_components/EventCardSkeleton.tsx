@@ -1,8 +1,8 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton";
 import { FC } from "react";
 
 interface EventCardSkeletonProps {
-    count : number;
+  count: number;
 }
 
 const EventCardSkeleton: FC<EventCardSkeletonProps> = ({ count }) => {
@@ -22,4 +22,5 @@ const EventCardSkeleton: FC<EventCardSkeletonProps> = ({ count }) => {
     </>
   );
 };
+
 export default EventCardSkeleton;
