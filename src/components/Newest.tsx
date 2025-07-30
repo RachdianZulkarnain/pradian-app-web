@@ -1,196 +1,77 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import useGetEvents from "@/app/events/hooks/useGetEvents";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const Newest = () => {
-  const [loading, setLoading] = useState(true);
-
-  const events = [
-    {
-      id: 1,
-      title: "Raisa Ambivert Showcase",
-      date: "11 Feb 2026 - 13 Feb 2026",
-      price: "Rp 2.000.000",
-      img: "/events/raisa.jpg",
-      author: "Rachdian",
-    },
-    {
-      id: 2,
-      title: "PLAYOFF IBL GOPAY 2025",
-      date: "31 Mar 2026 - 01 Apr 2026",
-      price: "Rp 650.000",
-      img: "/events/ibl.jpg",
-      author: "Rachdian",
-    },
-    {
-      id: 3,
-      title: "PLAYOFF IBL GOPAY 2025",
-      date: "31 Mar 2026 - 01 Apr 2026",
-      price: "Rp 650.000",
-      img: "/events/ibl.jpg",
-      author: "Rachdian",
-    },
-    {
-      id: 4,
-      title: "PLAYOFF IBL GOPAY 2025",
-      date: "31 Mar 2026 - 01 Apr 2026",
-      price: "Rp 650.000",
-      img: "/events/ibl.jpg",
-      author: "Rachdian",
-    },
-  ];
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+const NewestEvents = () => {
+  const { data: events, isPending } = useGetEvents({
+    page: 1,
+    search: "",
+    take: 4,
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
 
   return (
-    <section className="container mx-auto mt-12 p-4 py-4 md:px-8 lg:px-0">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-3xl font-semibold">Newest Event</h3>
+    <section className="container mx-auto mt-12 px-4 md:px-8">
+      {/* Section header */}
+      <div className="mb-6 flex flex-row flex-wrap items-center justify-between gap-2">
+        <h3 className="text-2xl font-semibold md:text-3xl">Newest Events</h3>
         <Link
           href="/events"
-          className="text-sm text-orange-400 hover:underline"
+          className="text-sm font-medium text-orange-500 hover:underline"
         >
           See all
         </Link>
       </div>
 
+      {/* Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {loading ? (
-          <div className="space-y-3 overflow-hidden rounded-xl bg-zinc-900 p-4 shadow-md">
-            <Skeleton className="h-[200px] w-full rounded-md" />
-            <Skeleton className="h-5 w-3/4" />
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-xl bg-zinc-900 shadow-md transition duration-300 hover:shadow-lg">
-            <div className="relative h-[200px] w-full">
-              <Image
-                src={events[0].img}
-                alt={events[0].title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h4 className="line-clamp-2 text-base font-semibold text-white">
-                {events[0].title}
-              </h4>
-              <p className="text-sm text-sky-400">{events[0].date}</p>
-              <p className="text-sm font-medium text-orange-400">
-                {events[0].price}
-              </p>
-              <p className="pt-2 text-xs text-white/50">
-                by {events[0].author}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {loading ? (
-          <div className="space-y-3 overflow-hidden rounded-xl bg-zinc-900 p-4 shadow-md">
-            <Skeleton className="h-[200px] w-full rounded-md" />
-            <Skeleton className="h-5 w-3/4" />
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-xl bg-zinc-900 shadow-md transition duration-300 hover:shadow-lg">
-            <div className="relative h-[200px] w-full">
-              <Image
-                src={events[1].img}
-                alt={events[1].title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h4 className="line-clamp-2 text-base font-semibold text-white">
-                {events[1].title}
-              </h4>
-              <p className="text-sm text-sky-400">{events[1].date}</p>
-              <p className="text-sm font-medium text-orange-400">
-                {events[1].price}
-              </p>
-              <p className="pt-2 text-xs text-white/50">
-                by {events[1].author}
-              </p>
-            </div>
-          </div>
-        )}
-        {loading ? (
-          <div className="space-y-3 overflow-hidden rounded-xl bg-zinc-900 p-4 shadow-md">
-            <Skeleton className="h-[200px] w-full rounded-md" />
-            <Skeleton className="h-5 w-3/4" />
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-xl bg-zinc-900 shadow-md transition duration-300 hover:shadow-lg">
-            <div className="relative h-[200px] w-full">
-              <Image
-                src={events[1].img}
-                alt={events[1].title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h4 className="line-clamp-2 text-base font-semibold text-white">
-                {events[1].title}
-              </h4>
-              <p className="text-sm text-sky-400">{events[1].date}</p>
-              <p className="text-sm font-medium text-orange-400">
-                {events[1].price}
-              </p>
-              <p className="pt-2 text-xs text-white/50">
-                by {events[1].author}
-              </p>
-            </div>
-          </div>
-        )}
-        {loading ? (
-          <div className="space-y-3 overflow-hidden rounded-xl bg-zinc-900 p-4 shadow-md">
-            <Skeleton className="h-[200px] w-full rounded-md" />
-            <Skeleton className="h-5 w-3/4" />
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-xl bg-zinc-900 shadow-md transition duration-300 hover:shadow-lg">
-            <div className="relative h-[200px] w-full">
-              <Image
-                src={events[1].img}
-                alt={events[1].title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h4 className="line-clamp-2 text-base font-semibold text-white">
-                {events[1].title}
-              </h4>
-              <p className="text-sm text-sky-400">{events[1].date}</p>
-              <p className="text-sm font-medium text-orange-400">
-                {events[1].price}
-              </p>
-              <p className="pt-2 text-xs text-white/50">
-                by {events[1].author}
-              </p>
-            </div>
-          </div>
-        )}
+        {isPending
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="space-y-3 overflow-hidden rounded-xl bg-zinc-900 p-4 shadow"
+              >
+                <Skeleton className="aspect-[4/3] w-full rounded-md" />
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            ))
+          : events?.data.map((event) => (
+              <div
+                key={event.id}
+                className="overflow-hidden rounded-xl bg-zinc-900 shadow transition hover:shadow-lg"
+              >
+                <div className="relative aspect-[4/3] w-full">
+                  <Image
+                    src={event.thumbnail || "/placeholder.jpg"}
+                    alt={event.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="space-y-2 p-4">
+                  <h4 className="line-clamp-2 text-base font-semibold text-white">
+                    {event.title}
+                  </h4>
+                  <p className="truncate text-sm text-sky-400">
+                    {new Date(event.startDate).toLocaleDateString()} –{" "}
+                    {new Date(event.endDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm font-medium text-orange-400">
+                    Rp {event.price.toLocaleString("id-ID")}
+                  </p>
+                </div>
+              </div>
+            ))}
       </div>
     </section>
   );
 };
 
-export default Newest;
+export default NewestEvents;
