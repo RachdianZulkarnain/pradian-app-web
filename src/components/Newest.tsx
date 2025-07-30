@@ -41,7 +41,7 @@ const NewestEvents = () => {
                 <Skeleton className="h-4 w-1/2" />
               </div>
             ))
-          : events?.data.map((event) => (
+          : events?.data?.map((event) => (
               <div
                 key={event.id}
                 className="overflow-hidden rounded-xl bg-zinc-900 shadow transition hover:shadow-lg"
