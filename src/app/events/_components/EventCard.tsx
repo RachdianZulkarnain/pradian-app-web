@@ -1,16 +1,16 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Event } from '@/types/events';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { FC } from 'react'
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Event } from "@/types/events";
+import Image from "next/image";
+import Link from "next/link";
+import { FC } from "react";
 
-interface EventCardProps {
+interface BlogCardProps {
   event: Event;
 }
 
-const EventCard: FC<EventCardProps> = ({ event }) => {
+const EventCard: FC<BlogCardProps> = ({ event }) => {
   return (
-    <Link href={`/events/${event.slug}`}>
+    <Link href={`/blogs/${event.slug}`}>
       <Card>
         <CardHeader>
           <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
@@ -31,4 +31,4 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   );
 };
 
-export default EventCard
+export default EventCard;

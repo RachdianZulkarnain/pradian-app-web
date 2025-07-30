@@ -3,10 +3,14 @@ export interface Event {
   slug: string;
   title: string;
   description: number;
+  location: string;
   content: string;
   category: string;
   thumbnail: string;
-  userId: number;
+  startDate: Date; 
+  endDate: Date;
+  price: number;
+  adminId: number;
   updatedAt: Date;
   createdAt: Date;
 }
