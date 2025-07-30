@@ -5,9 +5,15 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { LogIn, UserPlus } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathName = usePathname();
+
+  if (pathName ===  "/login" || pathName === "/register") {
+    return null;
+  }
 
   return (
     <header className="top-0 right-0 left-0 z-50 border-b bg-white shadow-sm">

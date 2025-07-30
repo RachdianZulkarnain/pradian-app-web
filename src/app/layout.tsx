@@ -1,11 +1,9 @@
+import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Category from "@/components/Category";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +25,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
       <body
