@@ -2,7 +2,7 @@ export interface Event {
   id: string;
   slug: string;
   title: string;
-  description: number;
+  description: string;
   location: string;
   content: string;
   category: string;

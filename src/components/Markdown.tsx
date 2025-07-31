@@ -3,10 +3,10 @@ import ReactMarkdown, { Components } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 interface MarkdownProps {
-  content: string;
+  description: string;
 }
 
-const Markdown: FC<MarkdownProps> = ({ content }) => {
+const Markdown: FC<MarkdownProps> = ({ description }) => {
   const components: Components = {
     h1: ({ children }) => <h1 className="text-2xl font-bold">{children}</h1>,
     h2: ({ children }) => <h2 className="text-xl font-bold">{children}</h2>,
@@ -15,7 +15,7 @@ const Markdown: FC<MarkdownProps> = ({ content }) => {
   };
   return (
     <ReactMarkdown rehypePlugins={[rehypeRaw]} components={components}>
-      {content}
+      {description}
     </ReactMarkdown>
   );
 };

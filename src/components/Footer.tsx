@@ -20,7 +20,7 @@ const socials = [
 
 export default function FooterSection() {
   return (
-    <footer className="bg-background border-muted border-t py-16 md:py-20">
+    <footer className="bg-background border-muted py-16 md:py-20">
       <div className="container mx-auto px-6">
         {/* Logo */}
         <div className="mb-8 flex justify-center">
