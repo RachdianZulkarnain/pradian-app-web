@@ -47,6 +47,7 @@ const NewestEvents = () => {
                 className="overflow-hidden rounded-xl bg-zinc-900 shadow transition hover:shadow-lg"
               >
                 <div className="relative aspect-[4/3] w-full">
+                <Link href={`/events/${event.slug}`} className="absolute inset-0 z-10" />
                   <Image
                     src={event.thumbnail || "/placeholder.jpg"}
                     alt={event.title}
