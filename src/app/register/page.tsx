@@ -25,9 +25,13 @@ const SignUp = () => {
   const { mutateAsync: register, isPending } = useRegister();
   return (
     <main className="container mx-auto">
-      <Card className="w-full max-w-sm mx-auto mt-25">
+      <Card className="mx-auto mt-25 w-full max-w-sm">
         <Formik
-          initialValues={{ name: "", email: "", password: "" }}
+          initialValues={{
+            name: "",
+            email: "",
+            password: ""
+          }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             await register(values);
