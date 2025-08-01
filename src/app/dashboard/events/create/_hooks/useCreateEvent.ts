@@ -8,8 +8,10 @@ interface Payload {
   title: string;
   category: string;
   description: string;
-  content: string;
   location: string;
+  startDate: string; // ISO 8601 format
+  endDate: string;
+  price: number;
   thumbnail: File | null;
 }
 
@@ -21,25 +23,31 @@ const useCreateEvent = () => {
   return useMutation({
     mutationFn: async (payload: Payload) => {
       const form = new FormData();
-
-      form.append("thumbnail", payload.thumbnail!);
       form.append("title", payload.title);
       form.append("category", payload.category);
       form.append("location", payload.location);
       form.append("description", payload.description);
-      form.append("content", payload.content);
+      form.append("startDate", payload.startDate);
+      form.append("endDate", payload.endDate);
+      form.append("price", String(payload.price)); // ensure string
+
+      if (payload.thumbnail) {
+        form.append("thumbnail", payload.thumbnail);
+      }
 
       await axiosInstance.post("/events", form, {
-        headers: { Authorization: `Bearer ${session.data?.user.accessToken}` },
+        headers: {
+          Authorization: `Bearer ${session.data?.user.accessToken}`,
+        },
       });
     },
     onSuccess: async () => {
-      alert("create event succes");
+      alert("Create event success");
       await queryClient.invalidateQueries({ queryKey: ["events"] });
       router.push("/");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {
-      alert(error.response?.data.message ?? "somenting went wrong!");
+      alert(error.response?.data.message ?? "Something went wrong!");
     },
   });
 };

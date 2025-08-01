@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Calendar, Clock, Sparkles } from "lucide-react";
+import Header from "@/components/Header";
+import Markdown from "@/components/Markdown";
 
 interface EventHeaderProps {
   slug: string;
@@ -109,20 +111,7 @@ const EventHeader: FC<EventHeaderProps> = async ({ slug }) => {
               value="description"
               className="space-y-4 pt-6 text-sm leading-relaxed text-gray-700"
             >
-              <p>{event.description}</p>
-              <ul className="list-inside list-disc space-y-1">
-                <li>Tiket secara resmi hanya dijual melalui Loket.com.</li>
-                <li>
-                  <span className="italic">Barcode</span> pada tiket ini
-                  digunakan sebagai akses masuk untuk ditukarkan{" "}
-                  <span className="italic">wristband</span>.
-                </li>
-                <li>
-                  1 <span className="italic">e-ticket/e-voucher</span> (1{" "}
-                  <span className="italic">barcode</span>) berlaku untuk 1
-                  orang.
-                </li>
-              </ul>
+              <Markdown description={event.description} />
             </TabsContent>
 
             <TabsContent value="tickets" className="pt-6">
@@ -177,10 +166,6 @@ const EventHeader: FC<EventHeaderProps> = async ({ slug }) => {
                 <div className="flex items-start gap-3">
                   <Calendar className="mt-0.5 h-5 w-5 text-orange-500" />
                   <span>{formattedDate}</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Clock className="mt-0.5 h-5 w-5 text-orange-500" />
-                  <span>19:00 - 23:00</span>
                 </div>
               </div>
 

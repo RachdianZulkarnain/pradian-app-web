@@ -11,7 +11,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathName = usePathname();
 
-  if (pathName ===  "/login" || pathName === "/register") {
+  if (pathName === "/login" || pathName === "/register") {
     return null;
   }
 
