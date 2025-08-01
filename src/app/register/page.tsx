@@ -18,11 +18,13 @@ import useRegister from "./_hooks/useRegister";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required").min(3),
   email: Yup.string().required("Email is required").email(),
-  password: Yup.string().required("password is required").min(6),
+  password: Yup.string().required("Password is required").min(6),
+  referralCode: Yup.string(), // Optional
 });
 
 const SignUp = () => {
   const { mutateAsync: register, isPending } = useRegister();
+
   return (
     <main className="container mx-auto">
       <Card className="mx-auto mt-25 w-full max-w-sm">
@@ -30,20 +32,22 @@ const SignUp = () => {
           initialValues={{
             name: "",
             email: "",
-            password: ""
+            password: "",
+            referralCode: "", 
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            await register(values);
+            await register(values); 
           }}
         >
           <Form className="space-y-4">
             <CardHeader>
               <CardTitle>Register to your account</CardTitle>
               <CardDescription>
-                Enter your email below to create to your account
+                Enter your details to create your account
               </CardDescription>
             </CardHeader>
+
             <CardContent>
               <div className="flex flex-col gap-6">
                 {/* Name */}
@@ -52,8 +56,8 @@ const SignUp = () => {
                   <Field
                     name="name"
                     as={Input}
-                    type="name"
-                    placeholder="your name"
+                    type="text"
+                    placeholder="Your name"
                   />
                   <ErrorMessage
                     name="name"
@@ -61,6 +65,7 @@ const SignUp = () => {
                     className="text-sm text-red-500"
                   />
                 </div>
+
                 {/* Email */}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -68,7 +73,7 @@ const SignUp = () => {
                     name="email"
                     as={Input}
                     type="email"
-                    placeholder="your email"
+                    placeholder="Your email"
                   />
                   <ErrorMessage
                     name="email"
@@ -84,7 +89,7 @@ const SignUp = () => {
                     name="password"
                     as={Input}
                     type="password"
-                    placeholder="your password"
+                    placeholder="Your password"
                   />
                   <ErrorMessage
                     name="password"
@@ -92,11 +97,28 @@ const SignUp = () => {
                     className="text-sm text-red-500"
                   />
                 </div>
+
+                {/* Referral Code */}
+                <div className="grid gap-2">
+                  <Label htmlFor="referralCode">Referral Code (optional)</Label>
+                  <Field
+                    name="referralCode"
+                    as={Input}
+                    type="text"
+                    placeholder="Enter referral code if any"
+                  />
+                  <ErrorMessage
+                    name="referralCode"
+                    component="p"
+                    className="text-sm text-red-500"
+                  />
+                </div>
               </div>
             </CardContent>
+
             <CardFooter className="flex-col gap-2">
               <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? <Wrench className="=animate-spin" /> : "Register"}
+                {isPending ? <Wrench className="animate-spin" /> : "Register"}
               </Button>
             </CardFooter>
           </Form>
