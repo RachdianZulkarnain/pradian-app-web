@@ -33,7 +33,8 @@ export default function RootLayout({
       >
         <ReactQueryProvider>
           <NextAuthProvider>
-            <Header /> {children}
+            <Header /> 
+            {children}
           </NextAuthProvider>
         </ReactQueryProvider>
         <Toaster richColors position="top-center" />
