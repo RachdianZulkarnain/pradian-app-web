@@ -1,17 +1,20 @@
 "use client";
-import { Menu, X } from "lucide-react";
+
+import { Menu, X, LogIn, UserPlus, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { LogIn, UserPlus } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import AccountMenu from "./profile-dropdown";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathName = usePathname();
+  const { data: session } = useSession();
 
-  if (pathName ===  "/login" || pathName === "/register") {
+  if (pathName === "/login" || pathName === "/register") {
     return null;
   }
 
@@ -34,12 +37,18 @@ const Header = () => {
 
         {/* Desktop Menu */}
         <div className="hidden items-center space-x-2 md:flex">
-          <Button className="px-4 py-2 text-sm sm:text-base">
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button className="px-4 py-2 text-sm sm:text-base">
-            <Link href="/register">Sign-Up</Link>
-          </Button>
+          {session ? (
+            <AccountMenu email={session.user?.email} points={0} />
+          ) : (
+            <>
+              <Button className="px-4 py-2 text-sm sm:text-base">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button className="px-4 py-2 text-sm sm:text-base">
+                <Link href="/register">Sign-Up</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -61,25 +70,42 @@ const Header = () => {
         <div className="absolute top-14 right-2 z-50 w-60 rounded-md border bg-white shadow-lg md:hidden">
           <div className="px-4 py-3">
             <p className="text-sm font-medium">Menu</p>
-            <p className="text-xs text-gray-500">0 points</p>
+            <p className="text-xs text-gray-500">
+              {session ? session.user?.email : "Not logged in"}
+            </p>
           </div>
           <div className="border-t">
-            <Link
-              href="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
-            >
-              <LogIn className="h-4 w-4 text-gray-700" />
-              Login
-            </Link>
-            <Link
-              href="/register"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
-            >
-              <UserPlus className="h-4 w-4 text-gray-700" />
-              Register
-            </Link>
+            {!session ? (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  <LogIn className="h-4 w-4 text-gray-700" />
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  <UserPlus className="h-4 w-4 text-gray-700" />
+                  Register
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  signOut({ callbackUrl: "/" });
+                }}
+                className="flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+              >
+                <LogOut className="h-4 w-4 text-gray-700" />
+                Sign Out
+              </button>
+            )}
           </div>
         </div>
       )}
