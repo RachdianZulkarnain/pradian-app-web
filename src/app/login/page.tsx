@@ -14,13 +14,14 @@ import { Label } from "@/components/ui/label";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Loader } from "lucide-react";
 import useLogin from "./_hooks/useLogin";
+import Link from "next/link";
 
 const SignIn = () => {
   const { mutateAsync: login, isPending } = useLogin();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 flex items-center justify-center px-4">
-      <Card className="w-full max-w-md backdrop-blur-md bg-white/5 border border-white/10 shadow-xl text-white rounded-2xl">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 px-4">
+      <Card className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 text-white shadow-xl backdrop-blur-md">
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values) => {
@@ -33,7 +34,7 @@ const SignIn = () => {
                 Welcome Back
               </CardTitle>
               <CardDescription className="text-sm text-gray-300">
-                Sign in to your EventHub account
+                Sign in to your PradianEvent account
               </CardDescription>
             </CardHeader>
 
@@ -48,7 +49,7 @@ const SignIn = () => {
                   as={Input}
                   type="email"
                   placeholder="you@example.com"
-                  className="bg-gray-800 border-gray-700 text-white placeholder-gray-400"
+                  className="border-gray-700 bg-gray-800 text-white placeholder-gray-400"
                 />
                 <ErrorMessage
                   name="email"
@@ -67,7 +68,7 @@ const SignIn = () => {
                   as={Input}
                   type="password"
                   placeholder="••••••••"
-                  className="bg-gray-800 border-gray-700 text-white placeholder-gray-400"
+                  className="border-gray-700 bg-gray-800 text-white placeholder-gray-400"
                 />
                 <ErrorMessage
                   name="password"
@@ -80,17 +81,20 @@ const SignIn = () => {
             <CardFooter className="flex-col gap-2 px-6 pb-6">
               <Button
                 type="submit"
-                className="w-full bg-pink-600 hover:bg-pink-700 transition text-white"
+                className="w-full bg-pink-600 text-white transition hover:bg-pink-700"
                 disabled={isPending}
               >
                 {isPending ? <Loader className="animate-spin" /> : "Login"}
               </Button>
-              <p className="text-xs text-center text-gray-400 mt-2">
+              <p className="mt-2 text-center text-xs text-gray-400">
                 New to EventHub?{" "}
                 <a href="/register" className="text-pink-500 hover:underline">
                   Create an account
                 </a>
               </p>
+              <Link href="/forgot-password" className="text-end">
+                Forgot your Password?
+              </Link>
             </CardFooter>
           </Form>
         </Formik>
