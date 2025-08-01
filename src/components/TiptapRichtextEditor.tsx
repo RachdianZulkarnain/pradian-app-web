@@ -1,7 +1,8 @@
+// components/TiptapRichtextEditor.tsx
 "use client";
 
 import { EditorContent, useEditor } from "@tiptap/react";
-import Starterkit from "@tiptap/starter-kit";
+import StarterKit from "@tiptap/starter-kit";
 import { useFormikContext } from "formik";
 import { FC } from "react";
 import TiptapMenuBar from "./TiptapMenuBar";
@@ -18,8 +19,9 @@ const TiptapRichtextEditor: FC<TiptapRichtextEditorProps> = ({
 }) => {
   const { setFieldValue, setFieldTouched, setFieldError, touched, values } =
     useFormikContext<any>();
+
   const editor = useEditor({
-    extensions: [Starterkit],
+    extensions: [StarterKit],
     content: values[name],
     editorProps: {
       attributes: {
@@ -34,8 +36,9 @@ const TiptapRichtextEditor: FC<TiptapRichtextEditorProps> = ({
       setFieldTouched(name, true);
     },
     onBlur: () => {
-      if (editor?.isEmpty) setFieldError(name, `${label} isrequired`);
+      if (editor?.isEmpty) setFieldError(name, `${label} is required`);
     },
+    immediatelyRender: false,
   });
 
   return (

@@ -17,6 +17,9 @@ const Header = () => {
   if (pathName === "/login" || pathName === "/register") {
     return null;
   }
+  if (pathName === "/dashboard" || pathName === "/dashboard") {
+    return null;
+  }
 
   return (
     <header className="top-0 right-0 left-0 z-50 border-b bg-white shadow-sm">

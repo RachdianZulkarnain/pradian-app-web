@@ -32,6 +32,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
+import Image from "next/image";
 
 const data = {
   user: {
@@ -68,10 +70,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href="/" className="flex items-center space-x-2">
+                <Image
+                  src="/assets/pradian-logo1.png"
+                  alt="Pradian Logo"
+                  width={50}
+                  height={50}
+                  className="object-contain"
+                />
+                <span className="text-xl font-bold text-black">
+                  Pradian<span className="text-red-600">Event</span>
+                </span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
