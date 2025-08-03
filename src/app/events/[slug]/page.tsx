@@ -13,7 +13,7 @@ const EventDetail = async ({
     <main className="container mx-auto px-4 pb-20">
       <Suspense fallback={<Loading />}>
         <EventHeader slug={slug} />
-        <FooterSection/>
+        <FooterSection />
       </Suspense>
     </main>
   );

@@ -4,18 +4,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 
-interface BlogCardProps {
-  event: Event;
+// Tambahkan tipe tickets manual jika belum ada di Event
+interface EventWithTickets extends Event {
+  tickets?: { price: number }[];
 }
 
+interface BlogCardProps {
+  event: EventWithTickets;
+}
+
+const formatPrice = (price: number | string | undefined) => {
+  const numericPrice = typeof price === "number" ? price : Number(price || 0);
+  return numericPrice.toLocaleString("id-ID");
+};
+
 const EventCard: FC<BlogCardProps> = ({ event }) => {
+  const lowestPrice =
+    event.tickets && event.tickets.length > 0
+      ? Math.min(...event.tickets.map((t) => Number(t.price)))
+      : null;
+
   return (
     <Link href={`/events/${event.slug}`}>
       <Card className="overflow-hidden rounded-xl pt-0 transition-shadow hover:shadow-md">
         <CardHeader className="p-0">
           <div className="relative h-[240px] w-full">
             <Image
-              src={event.thumbnail}
+              src={event.thumbnail || "/placeholder.png"}
               alt={event.title}
               fill
               className="object-cover"
@@ -30,7 +45,9 @@ const EventCard: FC<BlogCardProps> = ({ event }) => {
             {new Date(event.endDate).toLocaleDateString("id-ID")}
           </p>
           <h3 className="text-lg font-semibold text-gray-900">
-            Rp {event.price.toLocaleString("id-ID")}
+            {lowestPrice !== null
+              ? `Rp ${formatPrice(lowestPrice)}`
+              : "Belum tersedia"}
           </h3>
         </CardContent>
       </Card>
