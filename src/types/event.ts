@@ -7,10 +7,12 @@ export interface Event {
   content: string;
   category: string;
   thumbnail: string;
-  startDate: Date; 
+  startDate: Date;
   endDate: Date;
-  price: number;
   adminId: number;
   updatedAt: Date;
   createdAt: Date;
+  tickets?: {
+    price: number;
+  }[];
 }

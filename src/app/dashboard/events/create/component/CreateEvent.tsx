@@ -28,7 +28,6 @@ interface FormValues {
     from: Date | undefined;
     to: Date | undefined;
   };
-  price: number;
   thumbnail: File | null;
 }
 
@@ -37,9 +36,6 @@ const validationSchema = Yup.object().shape({
   category: Yup.string().required("Category is required"),
   location: Yup.string().required("Location is required"),
   description: Yup.string().required("Description is required"),
-  price: Yup.number()
-    .required("Price is required")
-    .min(0, "Price must be at least 0"),
   dateRange: Yup.object({
     from: Yup.date().required("Start date is required"),
     to: Yup.date().required("End date is required"),
@@ -47,7 +43,7 @@ const validationSchema = Yup.object().shape({
   thumbnail: Yup.mixed().required("Thumbnail is required"),
 });
 
-const CreatePage = () => {
+const CreateEvent = () => {
   const [previewImage, setPreviewImage] = useState<string>("");
   const { mutateAsync: createEvent, isPending } = useCreateEvent();
 
@@ -80,7 +76,6 @@ const CreatePage = () => {
           location: "",
           description: "",
           dateRange: { from: undefined, to: undefined },
-          price: 0,
           thumbnail: null,
         }}
         validationSchema={validationSchema}
@@ -96,7 +91,6 @@ const CreatePage = () => {
             description: values.description,
             startDate,
             endDate,
-            price: values.price,
             thumbnail: values.thumbnail,
           });
         }}
@@ -151,22 +145,6 @@ const CreatePage = () => {
                   </Field>
                   <ErrorMessage
                     name="location"
-                    component="div"
-                    className="text-sm text-red-500"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="price">Price *</Label>
-                  <Field
-                    name="price"
-                    type="number"
-                    as={Input}
-                    placeholder="Enter price"
-                    min="0"
-                  />
-                  <ErrorMessage
-                    name="price"
                     component="div"
                     className="text-sm text-red-500"
                   />
@@ -282,4 +260,4 @@ const CreatePage = () => {
   );
 };
 
-export default CreatePage;
+export default CreateEvent;

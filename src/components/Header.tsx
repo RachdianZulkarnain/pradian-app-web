@@ -17,14 +17,41 @@ const Header = () => {
   if (pathName === "/login" || pathName === "/register") {
     return null;
   }
+
   if (pathName === "/dashboard" || pathName === "/dashboard") {
+    return null;
+  }
+
+  if (
+    pathName === "/dashboard/events" ||
+    pathName === "/dashboard/events/create"
+  ) {
+    return null;
+  }
+  if (
+    pathName === "/dashboard/transactions" ||
+    pathName === "/dashboard/transactions/manual"
+  ) {
+    return null;
+  }
+
+  if (
+    pathName === "/dashboard/tickets" ||
+    pathName === "/dashboard/tickets/create"
+  ) {
+    return null;
+  }
+
+  if (
+    pathName === "/dashboard/voucher" ||
+    pathName === "/dashboard/voucher/create"
+  ) {
     return null;
   }
 
   return (
     <header className="top-0 right-0 left-0 z-50 border-b bg-white shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-3 sm:py-4">
-        {/* Logo + Brand */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/assets/pradian-logo1.png"
@@ -38,7 +65,6 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden items-center space-x-2 md:flex">
           {session ? (
             <AccountMenu email={session.user?.email} points={0} />
@@ -54,7 +80,6 @@ const Header = () => {
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
         <button
           className="md:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -68,7 +93,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="absolute top-14 right-2 z-50 w-60 rounded-md border bg-white shadow-lg md:hidden">
           <div className="px-4 py-3">

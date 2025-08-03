@@ -1,13 +1,9 @@
-import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
-import CreateEventPage from "./create/component/CreatePage";
+import React from 'react'
 
-const DashboardEvents = async () => {
-  const session = await auth();
+const event = () => {
+  return (
+    <div>event</div>
+  )
+}
 
-  if (!session?.user) return notFound();
-
-  return <CreateEventPage />;
-};
-
-export default DashboardEvents;
+export default event

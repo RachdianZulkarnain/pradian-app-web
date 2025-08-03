@@ -1,27 +1,16 @@
 "use client";
 
-import * as React from "react";
 import {
-  IconCamera,
-  IconChartBar,
   IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
-  IconReport,
-  IconSearch,
+  IconTicket,
+  IconDiscount2,
+  IconReceipt2,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react";
+import * as React from "react";
 
-import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -32,8 +21,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 const data = {
   user: {
@@ -48,14 +37,63 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Events",
-      url: "/dashboard/events",
-      icon: IconListDetails,
-    },
-    {
       title: "Transactions",
       url: "/dashboard/transactions",
-      icon: IconChartBar,
+      icon: IconReceipt2,
+      children: [
+        {
+          title: "Manual Transaction",
+          url: "/dashboard/transactions/manual",
+        },
+      ],
+    },
+    {
+      title: "All Events",
+      url: "/dashboard/events",
+      icon: IconListDetails,
+      children: [
+        {
+          title: "Create Event",
+          url: "/dashboard/events/create",
+        },
+      ],
+    },
+    {
+      title: "Tickets",
+      url: "/dashboard/tickets",
+      icon: IconTicket,
+      children: [
+        {
+          title: "Create Ticket",
+          url: "/dashboard/tickets/create",
+        },
+      ],
+    },
+    {
+      title: "Voucher",
+      url: "/dashboard/voucher",
+      icon: IconDiscount2,
+      children: [
+        {
+          title: "Create Voucher",
+          url: "/dashboard/voucher/create",
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      url: "/dashboard/Settings",
+      icon: IconSettings,
+      children: [
+        {
+          title: "Bank Details",
+          url: "/dashboard/settings/Bank Details",
+        },
+        {
+          title: "Change Password",
+          url: "/dashboard/settings/change password",
+        },
+      ],
     },
   ],
 };
@@ -70,7 +108,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <Link href="/" className="flex items-center space-x-2">
+              <Link href="/dashboard" className="flex items-center space-x-2">
                 <Image
                   src="/assets/pradian-logo1.png"
                   alt="Pradian Logo"
