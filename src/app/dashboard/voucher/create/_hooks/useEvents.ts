@@ -1,14 +1,13 @@
-"use client";
-
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "@/lib/axios";
+import axiosInstance from "@/lib/axios";
 
 export const useEvents = () => {
   return useQuery({
-    queryKey: ["events"],
+    queryKey: ["events-short"],
     queryFn: async () => {
-      const response = await axiosInstance.get("/events");
-      return response.data;
+      const res = await axiosInstance.get("/events/list/short");
+      console.log("Events from backend:", res.data);
+      return res.data;
     },
   });
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import { axiosInstance } from "@/lib/axios";
 import { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
@@ -17,11 +19,15 @@ const useLogin = () => {
   return useMutation({
     mutationFn: async (payload: Payload) => {
       const { data } = await axiosInstance.post<User>("auth/login", payload);
+
+      // Simpan token ke localStorage setelah login sukses
+      localStorage.setItem("token", data.accessToken); // pastikan token memang dikembalikan dari endpoint login
+
       return data;
     },
     onSuccess: async (data) => {
       await signIn("credentials", { ...data, redirect: false });
-      toast.success("sign in success");
+      toast.success("Sign in success");
       router.replace("/");
     },
     onError: (error: AxiosError<{ message: string }>) => {
