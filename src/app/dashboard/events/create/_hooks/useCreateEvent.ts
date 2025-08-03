@@ -9,9 +9,8 @@ interface Payload {
   category: string;
   description: string;
   location: string;
-  startDate: string; // ISO 8601 format
+  startDate: string;
   endDate: string;
-  price: number;
   thumbnail: File | null;
 }
 
@@ -29,7 +28,6 @@ const useCreateEvent = () => {
       form.append("description", payload.description);
       form.append("startDate", payload.startDate);
       form.append("endDate", payload.endDate);
-      form.append("price", String(payload.price)); // ensure string
 
       if (payload.thumbnail) {
         form.append("thumbnail", payload.thumbnail);
