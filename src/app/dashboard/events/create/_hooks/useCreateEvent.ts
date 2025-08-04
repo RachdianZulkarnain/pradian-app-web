@@ -42,7 +42,7 @@ const useCreateEvent = () => {
     onSuccess: async () => {
       alert("Create event success");
       await queryClient.invalidateQueries({ queryKey: ["events"] });
-      router.push("/");
+      router.push("/dashboard/tickets/create");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {
       alert(error.response?.data.message ?? "Something went wrong!");

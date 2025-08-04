@@ -80,10 +80,14 @@ const EventList = () => {
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="jakarta">Jakarta</SelectItem>
-            <SelectItem value="bandung">Bandung</SelectItem>
-            <SelectItem value="bali">Bali</SelectItem>
+            <SelectItem value="all">All Locations</SelectItem>
+            <SelectItem value="Jakarta">Jakarta</SelectItem>
+            <SelectItem value="Bandung">Bandung</SelectItem>
+            <SelectItem value="Surabaya">Surabaya</SelectItem>
+            <SelectItem value="Semarang">Semarang</SelectItem>
+            <SelectItem value="Makassar">Makassar</SelectItem>
+            <SelectItem value="Jogyakarta">Yogyakarta</SelectItem>
+            <SelectItem value="Bali">Bali</SelectItem>
           </SelectContent>
         </Select>
       </div>

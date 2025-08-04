@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 import useCreateVoucher from "../_hooks/useCreateVoucher";
 import { useEvents } from "../_hooks/useEvents";
 
@@ -22,8 +23,12 @@ const CreateVoucher = () => {
     limit: "",
   });
 
-  const { data: events = [], isLoading } = useEvents();
+  const { data: events = [], isLoading, isError } = useEvents();
   const createVoucher = useCreateVoucher();
+
+  useEffect(() => {
+    console.log("Events from backend:", events);
+  }, [events]);
 
   const generateCode = () => {
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -32,16 +37,34 @@ const CreateVoucher = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!form.event || !form.code || !form.value || !form.limit) {
-      alert("Please fill in all required fields.");
+      toast.error("Please fill in all required fields.");
       return;
     }
 
-    createVoucher.mutate({
-      event: form.event,
-      code: form.code,
-      value: Number(form.value),
-      limit: Number(form.limit),
+    const formData = new FormData();
+    formData.append("event", form.event);
+    formData.append("code", form.code);
+    formData.append("value", form.value);
+    formData.append("limit", form.limit);
+
+    createVoucher.mutate(formData, {
+      onSuccess: () => {
+        toast.success("Voucher created successfully!");
+        setForm({
+          event: "",
+          code: "",
+          value: "",
+          limit: "",
+        });
+      },
+      onError: (error: any) => {
+        const message =
+          error?.response?.data?.message || "Failed to create voucher.";
+        toast.error(message);
+        console.error("Voucher submission error:", error);
+      },
     });
   };
 
@@ -71,10 +94,14 @@ const CreateVoucher = () => {
                     <div className="px-4 py-2 text-sm text-gray-400">
                       Loading...
                     </div>
+                  ) : isError ? (
+                    <div className="px-4 py-2 text-sm text-red-500">
+                      Failed to load events.
+                    </div>
                   ) : events.length > 0 ? (
-                    events.map((event: { id: string; name: string }) => (
-                      <SelectItem key={event.id} value={event.id}>
-                        {event.name}
+                    events.map((event: { id: number; title: string }) => (
+                      <SelectItem key={event.id} value={event.id.toString()}>
+                        {event.title}
                       </SelectItem>
                     ))
                   ) : (

@@ -140,8 +140,13 @@ const CreateEvent = () => {
                     className="w-full rounded-md border px-3 py-2"
                   >
                     <option value="">Select location</option>
-                    <option value="jakarta">Jakarta</option>
-                    <option value="bandung">Bandung</option>
+                    <option value="Jakarta">Jakarta</option>
+                    <option value="Bandung">Bandung</option>
+                    <option value="Surabaya">Surabaya</option>
+                    <option value="Semarang">Semarang</option>
+                    <option value="Makassar">Makassar</option>
+                    <option value="Yogayakarta">yogyakarta</option>
+                    <option value="Bali">Bali</option>
                   </Field>
                   <ErrorMessage
                     name="location"

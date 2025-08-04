@@ -38,7 +38,7 @@ const useCreateTicket = () => {
     onSuccess: async () => {
       alert("Create ticket success");
       await queryClient.invalidateQueries({ queryKey: ["tickets"] });
-      router.push("/tickets");
+      router.push("/dashboard/voucher/create");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {
       alert(error.response?.data.message ?? "Something went wrong!");
