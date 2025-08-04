@@ -15,4 +15,8 @@ export interface Event {
   tickets?: {
     price: number;
   }[];
+  admin?: {
+    name: string;
+    pictureProfile?: string;
+  };
 }
