@@ -49,6 +49,14 @@ const Header = () => {
     return null;
   }
 
+  if (
+    pathName === "/dashboard/settings" ||
+    pathName === "/dashboard/settings/bank-details" ||
+    pathName === "/dashboard/settings/change-password"
+  ) {
+    return null;
+  }
+
   return (
     <header className="top-0 right-0 left-0 z-50 border-b bg-white shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-3 sm:py-4">
