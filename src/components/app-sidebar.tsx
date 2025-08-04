@@ -23,13 +23,9 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -82,16 +78,16 @@ const data = {
     },
     {
       title: "Settings",
-      url: "/dashboard/Settings",
+      url: "/dashboard/settings",
       icon: IconSettings,
       children: [
         {
           title: "Bank Details",
-          url: "/dashboard/settings/Bank Details",
+          url: "/dashboard/settings/bank-details",
         },
         {
           title: "Change Password",
-          url: "/dashboard/settings/change password",
+          url: "/dashboard/settings/change-password",
         },
       ],
     },
@@ -99,6 +95,14 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession();
+
+  const user = {
+    name: session?.user?.name ?? "Loading...",
+    email: session?.user?.email ?? "",
+    avatar: session?.user?.pictureProfile ?? "/avatars/default.jpg",
+  };
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -128,7 +132,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );
