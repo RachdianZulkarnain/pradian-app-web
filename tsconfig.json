@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/types/event.ts"
-  ],
+, "src/app/orders/[uuid]/_api/create-transaction", "src/app/orders/[uuid]/_api/get-transaction"  ],
   "exclude": ["node_modules"]
 }

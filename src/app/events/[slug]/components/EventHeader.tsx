@@ -2,11 +2,22 @@
 
 import { FC, useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { getEvent } from "../_api/get-event";
 import { getTicketsByEvent } from "../_api/get-tickets";
 import { getVouchersByEvent } from "../_api/get-vouchers";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Calendar, Copy } from "lucide-react";
 import Markdown from "@/components/Markdown";
@@ -14,6 +25,7 @@ import { toast } from "sonner";
 import { Event } from "@/types/event";
 import { Ticket } from "@/types/ticket";
 import { Voucher } from "@/types/voucher";
+
 
 interface EventHeaderProps {
   slug: string;
@@ -37,6 +49,8 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
+  const [showConfirm, setShowConfirm] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,10 +91,24 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
     }));
   };
 
+  const handleCheckout = () => {
+    const payload = tickets
+      .map((ticket) => ({
+        ticketId: ticket.id,
+        qty: quantities[ticket.id] || 0,
+      }))
+      .filter((item) => item.qty > 0);
+
+    if (payload.length === 0) return;
+
+    localStorage.setItem("checkout_payload", JSON.stringify(payload));
+    router.push("/orders/checkout");
+  };
+
   return (
     <div className="min-h-screen px-4 py-6 sm:px-6 md:py-15 lg:px-8">
       <div className="mx-auto max-w-6xl space-y-8 lg:grid lg:grid-cols-[2fr_1fr] lg:gap-8 lg:space-y-0">
-        {/* Left Content */}
+        {/* --- Left Content --- */}
         <div className="space-y-6">
           <div className="relative aspect-video w-full overflow-hidden rounded-2xl shadow-md">
             <Image
@@ -93,7 +121,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
             />
           </div>
 
-          {/* Mobile Event Info */}
+          {/* --- Mobile Info --- */}
           <div className="space-y-4 md:hidden">
             <h1 className="text-xl font-bold text-gray-900">{event.title}</h1>
             <div className="space-y-2 text-sm text-gray-600">
@@ -129,7 +157,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
             </div>
           </div>
 
-          {/* Voucher */}
+          {/* --- Voucher --- */}
           {vouchers.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {vouchers.map((voucher) => (
@@ -162,6 +190,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
             </div>
           )}
 
+          {/* --- Tabs: Description & Tickets --- */}
           <Tabs defaultValue="description" className="w-full">
             <TabsList className="grid w-full grid-cols-2 rounded-full bg-gray-100 p-1 text-sm">
               <TabsTrigger value="description">Description</TabsTrigger>
@@ -232,6 +261,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
             </TabsContent>
           </Tabs>
 
+          {/* --- Mobile Checkout --- */}
           <Card className="md:hidden">
             <CardContent className="space-y-4 p-6">
               <div className="flex items-center justify-between">
@@ -246,6 +276,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
                 className="w-full bg-orange-500 py-3 text-sm font-medium text-white hover:bg-orange-600"
                 size="lg"
                 disabled={totalPrice === 0}
+                onClick={handleCheckout}
               >
                 Checkout
               </Button>
@@ -253,7 +284,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
           </Card>
         </div>
 
-        {/* Desktop Sidebar */}
+        {/* --- Desktop Sidebar --- */}
         <div className="hidden space-y-6 md:block">
           <Card>
             <CardContent className="space-y-4 p-6">
@@ -304,13 +335,55 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
                   Rp {totalPrice.toLocaleString("id-ID")}
                 </span>
               </div>
-              <Button
-                className="w-full bg-orange-500 py-3 text-sm font-medium text-white hover:bg-orange-600"
-                size="lg"
-                disabled={totalPrice === 0}
-              >
-                Checkout
-              </Button>
+              <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
+                <DialogTrigger asChild>
+                  <Button
+                    className="w-full bg-orange-500 py-3 text-sm font-medium text-white hover:bg-orange-600"
+                    size="lg"
+                    disabled={totalPrice === 0}
+                  >
+                    Checkout
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Confirm Transaction</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to proceed with this transaction?
+                      This action cannot be undone.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="mt-4 flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowConfirm(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        const payload = tickets
+                          .map((ticket) => ({
+                            ticketId: ticket.id,
+                            qty: quantities[ticket.id] || 0,
+                          }))
+                          .filter((item) => item.qty > 0);
+
+                        localStorage.setItem(
+                          "checkout_payload",
+                          JSON.stringify(payload),
+                        );
+                        setShowConfirm(false);
+                        toast.success("Checkout success");
+                        router.push("/orders");
+                      }}
+                      className="bg-orange-500 text-white hover:bg-orange-600"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
         </div>
