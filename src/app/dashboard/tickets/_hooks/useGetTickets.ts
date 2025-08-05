@@ -4,18 +4,15 @@ import axiosInstance from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
-export type Event = {
+export type Ticket = {
   id: number;
   title: string;
-  location: string;
-  slug: string;
-  status: "DRAFT" | "ACTIVE";
-  startDate: string;
-  endDate: string;
-  thumbnail?: string | null;
-  tickets: {
-    price: number;
-  }[];
+  price: number;
+  stock: number;
+  totalPrice: number;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type Meta = {
@@ -24,25 +21,27 @@ type Meta = {
   total: number;
 };
 
-type GetEventsResponse = {
-  data: Event[];
+type GetTicketsResponse = {
+  data: Ticket[];
   meta: Meta;
 };
 
-export const useGetEvents = ({
+export const useGetTickets = ({
   page = 1,
   take = 10,
+  search = "",
 }: {
   page?: number;
   take?: number;
+  search?: string;
 }) => {
   const session = useSession();
 
-  return useQuery<GetEventsResponse>({
-    queryKey: ["my-events", page, take],
+  return useQuery<GetTicketsResponse>({
+    queryKey: ["tickets", page, take, search],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<GetEventsResponse>(
-        `/events/admin?take=${take}&page=${page}`,
+      const { data } = await axiosInstance.get<GetTicketsResponse>(
+        `/tickets/admin?take=${take}&page=${page}&search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${session.data?.user.accessToken}`,

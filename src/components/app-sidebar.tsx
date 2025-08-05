@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useGetDashboardProfile } from "@/app/dashboard/settings/_hooks/useGetDashboardProfile";
 
 const data = {
   navMain: [
@@ -36,12 +36,6 @@ const data = {
       title: "Transactions",
       url: "/dashboard/transactions",
       icon: IconReceipt2,
-      children: [
-        {
-          title: "Manual Transaction",
-          url: "/dashboard/transactions/manual",
-        },
-      ],
     },
     {
       title: "All Events",
@@ -52,6 +46,10 @@ const data = {
           title: "Create Event",
           url: "/dashboard/events/create",
         },
+        {
+          title: "Attendees",
+          url: "/dashboard/events/attendees",
+        }
       ],
     },
     {
@@ -95,12 +93,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: session } = useSession();
+  const { data: profile, isLoading } = useGetDashboardProfile();
 
   const user = {
-    name: session?.user?.name ?? "Loading...",
-    email: session?.user?.email ?? "",
-    avatar: session?.user?.pictureProfile ?? "/avatars/default.jpg",
+    name: profile?.name ?? "Loading...",
+    email: profile?.email ?? "",
+    avatar: profile?.pictureProfile ?? "/avatars/default.jpg",
   };
 
   return (

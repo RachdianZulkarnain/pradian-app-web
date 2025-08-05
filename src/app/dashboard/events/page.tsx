@@ -1,32 +1,31 @@
 "use client";
 
+import { useState } from "react";
+import { columns } from "./columns";
+import { useGetEvents } from "./_hooks/useGetEvents";
 import { DataTable } from "@/components/data-table";
-import { columns, EventRow } from "./columns";
+import PaginationSection from "@/components/PaginationSection";
 
-export default function EventListPage() {
-  const data: EventRow[] = [
-    {
-      thumbnail: null,
-      title: "Tech Expo 2025",
-      status: "Active",
-      location: "Jakarta",
-      startDate: "2025-09-01T00:00:00.000Z",
-      endDate: "2025-09-03T00:00:00.000Z",
-    },
-    {
-      thumbnail: null,
-      title: "Startup Meetup",
-      status: "Draft",
-      location: "Bandung",
-      startDate: "2025-10-10T00:00:00.000Z",
-      endDate: "2025-10-11T00:00:00.000Z",
-    },
-  ];
+const MyEventsPage = () => {
+  const [page, setPage] = useState(1);
+  const take = 10;
+
+  const { data, isLoading, isError } = useGetEvents({ page, take });
+
+  // ✅ Safely wait until data is loaded
+  if (isLoading) return <p>Loading events...</p>;
+  if (isError || !data || !data.meta) return <p>Failed to load events</p>;
 
   return (
-    <div className="space-y-4 p-6">
-      <h1 className="text-2xl font-bold">My Events</h1>
-      <DataTable columns={columns} data={data} />
+    <div>
+      <h1 className="mb-4 text-xl font-semibold">My Events</h1>
+
+      <DataTable columns={columns} data={data.data} />
+
+      {/* 🔁 Custom pagination */}
+      <PaginationSection meta={data.meta} setPage={setPage} />
     </div>
   );
-}
+};
+
+export default MyEventsPage;

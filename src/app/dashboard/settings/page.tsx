@@ -1,80 +1,127 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useUpdateProfileAdmin } from "./_hooks/useUpdateProfileAdmin";
 import { useGetDashboardProfile } from "./_hooks/useGetDashboardProfile";
 
-export default function ProfilePage() {
-  const { data: user, isLoading, isError } = useGetDashboardProfile();
+const ProfilePage = () => {
+  const { data: profile, isLoading } = useGetDashboardProfile();
+  const updateMutation = useUpdateProfileAdmin();
+
+  const [name, setName] = useState("");
+  const [pictureProfile, setPictureProfile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (profile) {
+      setName(profile.name);
+    }
+  }, [profile]);
+
+  const handleSubmit = async () => {
+    if (!name.trim()) {
+      toast.error("Name cannot be empty");
+      return;
+    }
+
+    try {
+      await updateMutation.mutateAsync({ name, pictureProfile });
+      setPictureProfile(null); // reset uploaded picture state
+    } catch {
+      // error handled in hook
+    }
+  };
 
   if (isLoading) {
     return (
-      <div className="mx-auto mt-10 flex max-w-4xl gap-8">
-        <aside className="w-64 space-y-2">
-          <Skeleton className="h-8 w-1/2" />
-          <Skeleton className="h-8 w-3/4" />
-        </aside>
-        <div className="flex-1 space-y-4">
-          <Skeleton className="h-6 w-full" />
-          <Skeleton className="h-6 w-full" />
-          <Skeleton className="h-6 w-3/4" />
-          <Skeleton className="h-6 w-1/2" />
-        </div>
-      </div>
-    );
-  }
-
-  if (isError || !user) {
-    return (
-      <div className="mt-10 text-center text-red-500">
-        Failed to load profile. Please try again.
+      <div className="space-y-4 p-6">
+        <Skeleton className="h-6 w-1/3" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-1/3" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto mt-10 flex max-w-4xl gap-8">
-      {/* Profile Details */}
-      <div className="flex-1 space-y-6">
-        <div className="flex items-center gap-4">
-          {user.pictureProfile ? (
-            <Image
-              src={user.pictureProfile}
-              alt="Profile"
-              width={80}
-              height={80}
-              className="rounded-full object-cover"
+    <div className="space-y-6 p-6">
+      <div>
+        <h1 className="text-2xl font-bold">Profile</h1>
+        <p className="text-muted-foreground text-sm">
+          Manage your profile settings.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              disabled={updateMutation.isPending}
             />
-          ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 text-gray-500">
-              No Image
-            </div>
-          )}
-          <div>
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-muted-foreground text-sm">{user.email}</p>
+            <p className="text-muted-foreground text-sm">
+              You can edit your full name here.
+            </p>
           </div>
+
+          <div className="space-y-2">
+            <Label>Email</Label>
+            <Input value={profile?.email} disabled />
+            <p className="text-muted-foreground text-sm">
+              This field is not editable.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Role</Label>
+            <Input value={profile?.role} disabled />
+            <p className="text-muted-foreground text-sm">
+              This field is not editable.
+            </p>
+          </div>
+
+          <Button onClick={handleSubmit} disabled={updateMutation.isPending}>
+            {updateMutation.isPending ? "Saving..." : "Save"}
+          </Button>
         </div>
 
-        <div className="grid max-w-md gap-4">
-          <div>
-            <Label>Name</Label>
-            <Input value={user.name} disabled />
-          </div>
-          <div>
-            <Label>Email</Label>
-            <Input value={user.email} disabled />
-          </div>
-          <div>
-            <Label>Role</Label>
-            <Input value={user.role} disabled />
-          </div>
+        <div className="space-y-2">
+          <Label>Profile Picture</Label>
+          <Avatar className="h-40 w-40 border">
+            <AvatarImage
+              src={
+                pictureProfile
+                  ? URL.createObjectURL(pictureProfile)
+                  : profile?.pictureProfile || undefined
+              }
+              alt="Profile"
+            />
+            <AvatarFallback>{name[0]}</AvatarFallback>
+          </Avatar>
+          <Input
+            type="file"
+            accept="image/*"
+            disabled={updateMutation.isPending}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) setPictureProfile(file);
+            }}
+          />
+          <p className="text-muted-foreground text-sm">
+            You can edit your profile picture here.
+          </p>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProfilePage;

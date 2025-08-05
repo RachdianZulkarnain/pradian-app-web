@@ -1,15 +1,35 @@
 // columns.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowUpDown } from "lucide-react";
 import * as Yup from "yup";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { InferType } from "yup";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useUpdateTransaction } from "./_hooks/useUpdateTransactions";
+import { Toaster } from "@/components/ui/sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 // Yup schema for a transaction row
 const transactionSchema = Yup.object({
+  uuid: Yup.string().uuid("Invalid UUID format").required("UUID is required"),
   eventName: Yup.string().required(),
   Email: Yup.string().email().required(),
   quantity: Yup.number().required().min(1),
@@ -24,6 +44,7 @@ const transactionSchema = Yup.object({
     "REJECT",
     "EXPIRED",
   ]),
+  paymentProof: Yup.string().nullable(),
 });
 
 type TransactionStatus =
@@ -135,6 +156,111 @@ export const columns: ColumnDef<TransactionRow>[] = [
         <span className={`font-semibold capitalize ${statusColor}`}>
           {status.replace(/_/g, " ")}
         </span>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const transaction = row.original;
+      const { mutate: updateTransaction, isPending } = useUpdateTransaction();
+      const queryClient = useQueryClient();
+
+      return (
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+              {/* View Payment Proof */}
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  disabled={!transaction.paymentProof}
+                  className={!transaction.paymentProof ? "opacity-50" : ""}
+                >
+                  View Payment Proof
+                </DropdownMenuItem>
+              </DialogTrigger>
+
+              <DropdownMenuSeparator />
+
+              {/* Accept Payment */}
+              <DropdownMenuItem
+                disabled={isPending}
+                onClick={() =>
+                  updateTransaction(
+                    { uuid: transaction.uuid, type: "ACCEPT" },
+                    {
+                      onSuccess: () => {
+                        toast.success("Transaction accepted ✅");
+                        queryClient.invalidateQueries({
+                          queryKey: ["transactions"],
+                        });
+                      },
+                      onError: (error: any) => {
+                        toast.error("Failed to accept transaction", {
+                          description:
+                            error?.response?.data?.message ||
+                            "Unexpected error occurred",
+                        });
+                      },
+                    },
+                  )
+                }
+              >
+                Accept Payment
+              </DropdownMenuItem>
+
+              {/* Reject Payment */}
+              <DropdownMenuItem
+                disabled={isPending}
+                onClick={() =>
+                  updateTransaction(
+                    { uuid: transaction.uuid, type: "REJECT" },
+                    {
+                      onSuccess: () => {
+                        toast.success("Transaction rejected ❌");
+                        queryClient.invalidateQueries({
+                          queryKey: ["transactions"],
+                        });
+                      },
+                      onError: (error: any) => {
+                        toast.error("Failed to reject transaction", {
+                          description:
+                            error?.response?.data?.message ||
+                            "Unexpected error occurred",
+                        });
+                      },
+                    },
+                  )
+                }
+              >
+                Decline Payment
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* Payment Proof Dialog */}
+          <DialogTitle>
+            <DialogContent className="max-w-md">
+              {transaction.paymentProof ? (
+                <img
+                  src={transaction.paymentProof}
+                  alt="Payment Proof"
+                  className="w-full rounded-lg"
+                />
+              ) : (
+                <p>No payment proof uploaded.</p>
+              )}
+            </DialogContent>
+          </DialogTitle>
+        </Dialog>
       );
     },
   },
