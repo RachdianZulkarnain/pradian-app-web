@@ -3,7 +3,7 @@
 import axiosInstance from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { TransactionRow } from "../columns"; // Adjust if needed
+import { TransactionRow } from "../columns";
 
 type Meta = {
   page: number;

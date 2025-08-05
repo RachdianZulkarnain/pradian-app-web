@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import axiosInstance from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,8 +11,8 @@ interface Payload {
   name: string;
   pictureProfile: File | null;
 }
-export const useUpdateProfile = () => {
-  const router = useRouter();
+
+export const useUpdateProfileAdmin = () => {
   const queryClient = useQueryClient();
   const session = useSession();
 
@@ -27,15 +27,17 @@ export const useUpdateProfile = () => {
         form.append("name", payload.name);
       }
 
-      await axiosInstance.patch("/profile/edit", form, {
-        headers: { Authorization: `Bearer ${session.data?.user.accessToken}` },
+      await axiosInstance.patch("/profile/admin", form, {
+        headers: {
+          Authorization: `Bearer ${session.data?.user.accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
 
     onSuccess: async () => {
       toast.success("Profile updated successfully");
       await queryClient.invalidateQueries({ queryKey: ["profile"] });
-      router.push("/profile");
     },
 
     onError: (error: AxiosError<{ message: string; code: number }>) => {

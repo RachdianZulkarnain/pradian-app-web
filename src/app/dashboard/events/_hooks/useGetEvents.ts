@@ -8,6 +8,7 @@ export type Event = {
   id: number;
   title: string;
   location: string;
+  slug: string;
   status: "DRAFT" | "ACTIVE";
   startDate: string;
   endDate: string;

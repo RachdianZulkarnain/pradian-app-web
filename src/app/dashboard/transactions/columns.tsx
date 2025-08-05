@@ -16,7 +16,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { InferType } from "yup";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useUpdateTransaction } from "./_hooks/useUpdateTransactions";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -242,17 +247,19 @@ export const columns: ColumnDef<TransactionRow>[] = [
             </DropdownMenuContent>
           </DropdownMenu>
           {/* Payment Proof Dialog */}
-          <DialogContent className="max-w-md">
-            {transaction.paymentProof ? (
-              <img
-                src={transaction.paymentProof}
-                alt="Payment Proof"
-                className="w-full rounded-lg"
-              />
-            ) : (
-              <p>No payment proof uploaded.</p>
-            )}
-          </DialogContent>
+          <DialogTitle>
+            <DialogContent className="max-w-md">
+              {transaction.paymentProof ? (
+                <img
+                  src={transaction.paymentProof}
+                  alt="Payment Proof"
+                  className="w-full rounded-lg"
+                />
+              ) : (
+                <p>No payment proof uploaded.</p>
+              )}
+            </DialogContent>
+          </DialogTitle>
         </Dialog>
       );
     },

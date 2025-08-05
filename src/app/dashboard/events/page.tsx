@@ -4,6 +4,7 @@ import { useState } from "react";
 import { columns } from "./columns";
 import { useGetEvents } from "./_hooks/useGetEvents";
 import { DataTable } from "@/components/data-table";
+import PaginationSection from "@/components/PaginationSection";
 
 const MyEventsPage = () => {
   const [page, setPage] = useState(1);
@@ -15,30 +16,14 @@ const MyEventsPage = () => {
   if (isLoading) return <p>Loading events...</p>;
   if (isError || !data || !data.meta) return <p>Failed to load events</p>;
 
-  const totalPages = Math.ceil(data.meta.total / take);
-
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">My Events</h1>
+      <h1 className="mb-4 text-xl font-semibold">My Events</h1>
+
       <DataTable columns={columns} data={data.data} />
 
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {data.meta.page} of {totalPages}
-        </span>
-        <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={page === totalPages}
-        >
-          Next
-        </button>
-      </div>
+      {/* 🔁 Custom pagination */}
+      <PaginationSection meta={data.meta} setPage={setPage} />
     </div>
   );
 };

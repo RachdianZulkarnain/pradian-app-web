@@ -29,17 +29,19 @@ type GetTicketsResponse = {
 export const useGetTickets = ({
   page = 1,
   take = 10,
+  search = "",
 }: {
   page?: number;
   take?: number;
+  search?: string;
 }) => {
   const session = useSession();
 
   return useQuery<GetTicketsResponse>({
-    queryKey: ["tickets", page, take],
+    queryKey: ["tickets", page, take, search],
     queryFn: async () => {
       const { data } = await axiosInstance.get<GetTicketsResponse>(
-        `/tickets/admin?take=${take}&page=${page}`,
+        `/tickets/admin?take=${take}&page=${page}&search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${session.data?.user.accessToken}`,

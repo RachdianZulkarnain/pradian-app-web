@@ -10,19 +10,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useUpdateEventStatus } from "./_hooks/useUpdateEventStatus";
+import Link from "next/link";
 
 export type EventRow = {
   id: number;
   thumbnail?: string | null;
+  slug: string;
   title: string;
   status: "ACTIVE" | "DRAFT";
   location: string;
-  startDate: string; 
-  endDate: string; 
+  startDate: string;
+  endDate: string;
 };
 
 export const columns: ColumnDef<EventRow>[] = [
@@ -74,7 +76,6 @@ export const columns: ColumnDef<EventRow>[] = [
           eventId: row.original.id,
           status: newStatus.toUpperCase() as "ACTIVE" | "DRAFT",
         });
-
       };
 
       return (
@@ -120,6 +121,30 @@ export const columns: ColumnDef<EventRow>[] = [
     cell: ({ row }) => {
       const value = row.getValue("endDate");
       return <span>{format(new Date(value as string), "dd MMM yyyy")}</span>;
+    },
+  },
+  {
+    id: "actions",
+    header: "",
+    cell: ({ row }) => {
+      const event = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <Link href={`/dashboard/events/${event.slug}/edit`} passHref>
+              <DropdownMenuItem>Edit Event</DropdownMenuItem>
+            </Link>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];

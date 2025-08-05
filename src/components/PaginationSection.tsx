@@ -10,44 +10,49 @@ import {
 } from "@/components/ui/pagination";
 import { PaginationMeta } from "@/types/pagination";
 
-interface PaginationServiceProps {
+interface PaginationSectionProps {
   meta: PaginationMeta;
   setPage: (page: number) => void;
 }
 
-const PaginationSection = ({ meta, setPage }: PaginationServiceProps) => {
+const PaginationSection = ({ meta, setPage }: PaginationSectionProps) => {
   const { page, take, total } = meta;
+  const totalPages = Math.ceil(total / take);
 
   const handlePrev = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
+    if (page > 1) setPage(page - 1);
   };
 
   const handleNext = () => {
-    const totalPage = Math.ceil(total / take);
-
-    if (page < totalPage) {
-      setPage(page + 1);
-    }
+    if (page < totalPages) setPage(page + 1);
   };
 
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious onClick={handlePrev} />
-        </PaginationItem>
+    <div className="mt-6 flex w-full justify-center">
+      <Pagination>
+        <PaginationContent className="flex items-center space-x-4">
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={handlePrev}
+              className={page <= 1 ? "cursor-not-allowed opacity-50" : ""}
+            />
+          </PaginationItem>
 
-        <PaginationItem>
-          <PaginationLink>{page}</PaginationLink>
-        </PaginationItem>
+          <PaginationItem>
+            <span className="text-sm text-muted-foreground font-medium">
+              Page {page} of {totalPages}
+            </span>
+          </PaginationItem>
 
-        <PaginationItem>
-          <PaginationNext onClick={handleNext} />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          <PaginationItem>
+            <PaginationNext
+              onClick={handleNext}
+              className={page >= totalPages ? "cursor-not-allowed opacity-50" : ""}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 };
 

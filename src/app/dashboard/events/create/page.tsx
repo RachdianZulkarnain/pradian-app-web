@@ -1,5 +1,5 @@
-import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import CreateEvent from "./component/CreateEvent";
 
 const DashboardEvents = async () => {
