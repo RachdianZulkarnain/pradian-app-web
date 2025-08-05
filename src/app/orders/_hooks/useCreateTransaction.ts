@@ -7,7 +7,7 @@ export const createTransaction = async (payload: any, token: string) => {
     },
   });
 
-  return res.data; // Ini akan berisi data transaksi termasuk UUID
+  return res.data; 
 };
 
 export default createTransaction;

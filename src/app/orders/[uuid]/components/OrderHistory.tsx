@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,192 +9,113 @@ import {
   Search,
   MapPin,
   Calendar,
-  Clock,
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
 import Image from "next/image";
+import { getOrders, Order } from "../_api/get-orders";
 
 export default function OrderHistory() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const orders = [
-    {
-      id: 1,
-      title: "PLAYOFF IBL GOPAY 2025 : TANGERANG HAWKS...",
-      location: "Surabaya",
-      dateRange: "31 Mar 2026 - 01 Apr 2026",
-      time: "19:00 - 23:00",
-      status: "WAITING_CONFIRMATION",
-      image: "/placeholder.svg?height=120&width=180&text=Basketball+Event",
-    },
-    {
-      id: 2,
-      title: "PLAYOFF IBL GOPAY 2025 : TANGERANG HAWKS...",
-      location: "Surabaya",
-      dateRange: "31 Mar 2026 - 01 Apr 2026",
-      time: "19:00 - 23:00",
-      status: "WAITING_CONFIRMATION",
-      image: "/placeholder.svg?height=120&width=180&text=Basketball+Event",
-    },
-    {
-      id: 3,
-      title: "Raisa Ambivert Showcase",
-      location: "Tangerang",
-      dateRange: "11 Feb 2026 - 13 Feb 2026",
-      time: "19:00 - 23:00",
-      status: "CREATED",
-      image: "/placeholder.svg?height=120&width=180&text=Concert+Event",
-    },
-    {
-      id: 4,
-      title: "Raisa Ambivert Showcase",
-      location: "Tangerang",
-      dateRange: "11 Feb 2026 - 13 Feb 2026",
-      time: "19:00 - 23:00",
-      status: "CREATED",
-      image: "/placeholder.svg?height=120&width=180&text=Concert+Event",
-    },
-    {
-      id: 5,
-      title: "Raisa Ambivert Showcase",
-      location: "Tangerang",
-      dateRange: "11 Feb 2026 - 13 Feb 2026",
-      time: "19:00 - 23:00",
-      status: "CREATED",
-      image: "/placeholder.svg?height=120&width=180&text=Concert+Event",
-    },
-    {
-      id: 6,
-      title: "Jakarta Music Festival 2026",
-      location: "Jakarta",
-      dateRange: "15 Apr 2026 - 17 Apr 2026",
-      time: "18:00 - 24:00",
-      status: "CONFIRMED",
-      image: "/placeholder.svg?height=120&width=180&text=Music+Festival",
-    },
-    {
-      id: 7,
-      title: "Tech Conference Indonesia",
-      location: "Bandung",
-      dateRange: "22 May 2026 - 24 May 2026",
-      time: "09:00 - 17:00",
-      status: "WAITING_CONFIRMATION",
-      image: "/placeholder.svg?height=120&width=180&text=Tech+Conference",
-    },
-    {
-      id: 8,
-      title: "Food Festival Surabaya",
-      location: "Surabaya",
-      dateRange: "10 Jun 2026 - 12 Jun 2026",
-      time: "10:00 - 22:00",
-      status: "CREATED",
-      image: "/placeholder.svg?height=120&width=180&text=Food+Festival",
-    },
-  ];
-
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [totalOrders, setTotalOrders] = useState(0);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const router = useRouter();
 
-  const filteredOrders = orders.filter(
-    (order) =>
-      order.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.location.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const fetchOrders = async () => {
+    try {
+      const result = await getOrders(currentPage, searchQuery);
+      setOrders(result.data);
+      setTotalOrders(result.total);
+    } catch (err) {
+      console.error("Failed to fetch orders", err);
+    }
+  };
 
-  const paginatedOrders = filteredOrders.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
+  useEffect(() => {
+    fetchOrders();
+  }, [currentPage, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(totalOrders / itemsPerPage));
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "WAITING_CONFIRMATION":
-        return "bg-orange-100 text-orange-700 border-orange-200";
       case "CREATED":
-        return "bg-orange-100 text-orange-700 border-orange-200";
-      case "CONFIRMED":
-        return "bg-green-100 text-green-700 border-green-200";
+        return "bg-yellow-100 text-yellow-800 border-yellow-300"; // Menunggu pembayaran
+      case "WAITING_FOR_CONFIRMATION":
+        return "bg-blue-100 text-blue-800 border-blue-300"; // Menunggu konfirmasi admin
+      case "PAID":
+        return "bg-green-100 text-green-800 border-green-300"; // Berhasil
+      case "REJECT":
+        return "bg-red-100 text-red-800 border-red-300"; // Ditolak
+      case "EXPIRED":
+        return "bg-gray-100 text-gray-500 border-gray-300"; // Kadaluarsa
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-slate-100 text-slate-700 border-slate-300"; // Status tidak dikenal
     }
   };
 
   return (
-    <div className="mx-auto min-h-screen max-w-4xl bg-gray-50 p-6">
-      {/* Page Title */}
+    <div className="mx-auto min-h-screen max-w-5xl p-4 sm:p-6">
       <h1 className="mb-6 text-2xl font-bold text-gray-900">Order History</h1>
 
-      {/* Search Bar */}
-      <div className="relative mb-8">
+      <div className="relative mb-8 w-full">
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
         <Input
-          placeholder="Search"
-          className="max-w-md border-gray-200 bg-white pl-10"
+          placeholder="Search event title"
+          className="w-full max-w-md rounded-md border-gray-200 bg-white pl-10 shadow-sm"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setCurrentPage(1);
+            setSearchQuery(e.target.value);
+          }}
         />
       </div>
 
-      {/* Order List */}
-      <div className="mb-8 space-y-4">
-        {paginatedOrders.map((order) => (
+      <div className="mb-8 grid gap-4">
+        {orders.map((order) => (
           <div
-            key={order.id}
-            className="cursor-pointer rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+            key={order.uuid}
+            className="cursor-pointer rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+            onClick={() => router.push(`/orders/${order.uuid}`)}
           >
-            <div className="flex items-center space-x-4">
-              {/* Event Image */}
-              <div className="flex-shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
+              <div className="mb-4 sm:mb-0 sm:w-[180px]">
                 <Image
                   src={order.image || "/placeholder.svg"}
                   alt={order.title}
                   width={180}
                   height={120}
-                  className="rounded-lg object-cover"
+                  className="h-[120px] w-full rounded-md object-cover"
                 />
               </div>
 
-              {/* Event Details */}
-              <div className="min-w-0 flex-1">
-                <h3 className="mb-3 truncate text-lg font-semibold text-gray-900">
+              <div className="flex-1 space-y-2">
+                <h3 className="truncate text-lg font-semibold text-gray-900">
                   {order.title}
                 </h3>
 
-                <div className="space-y-2">
-                  {/* Location */}
-                  <div className="flex items-center text-gray-600">
-                    <MapPin className="mr-2 h-4 w-4 flex-shrink-0 text-orange-500" />
-                    <span className="text-sm">{order.location}</span>
-                  </div>
-
-                  {/* Date Range */}
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="mr-2 h-4 w-4 flex-shrink-0 text-orange-500" />
-                    <span className="text-sm">{order.dateRange}</span>
-                  </div>
-
-                  {/* Time */}
-                  <div className="flex items-center text-gray-600">
-                    <Clock className="mr-2 h-4 w-4 flex-shrink-0 text-orange-500" />
-                    <span className="text-sm">{order.time}</span>
-                  </div>
-
-                  {/* Status Badge */}
-                  <div className="pt-1">
-                    <Badge
-                      variant="outline"
-                      className={`text-xs font-medium ${getStatusColor(order.status)}`}
-                    >
-                      {order.status}
-                    </Badge>
-                  </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <MapPin className="mr-2 h-4 w-4 text-orange-500" />
+                  {order.location}
                 </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Calendar className="mr-2 h-4 w-4 text-orange-500" />
+                  {order.dateRange}
+                </div>
+
+                <Badge
+                  variant="outline"
+                  className={`mt-2 w-fit text-xs font-medium ${getStatusColor(
+                    order.status,
+                  )}`}
+                >
+                  {order.status}
+                </Badge>
               </div>
 
-              {/* Arrow Icon */}
-              <div className="flex-shrink-0">
+              <div className="mt-3 sm:mt-0 sm:self-center">
                 <ChevronRight className="h-5 w-5 text-gray-400" />
               </div>
             </div>
@@ -201,34 +123,32 @@ export default function OrderHistory() {
         ))}
       </div>
 
-      {/* Pagination */}
-      <div className="flex items-center justify-center space-x-2">
+      <div className="flex flex-wrap justify-center gap-2">
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center bg-transparent"
-          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
           disabled={currentPage === 1}
         >
           <ChevronLeft className="mr-1 h-4 w-4" />
           Previous
         </Button>
 
-        {[...Array(totalPages)].map((_, index) => {
-          const pageNumber = index + 1;
+        {Array.from({ length: totalPages }).map((_, index) => {
+          const page = index + 1;
           return (
             <Button
-              key={pageNumber}
-              variant={currentPage === pageNumber ? "default" : "outline"}
+              key={page}
+              variant={currentPage === page ? "default" : "outline"}
               size="sm"
+              onClick={() => setCurrentPage(page)}
               className={
-                currentPage === pageNumber
-                  ? "border-orange-500 bg-orange-500 hover:bg-orange-600"
+                currentPage === page
+                  ? "border-orange-500 bg-orange-500 text-white hover:bg-orange-600"
                   : ""
               }
-              onClick={() => setCurrentPage(pageNumber)}
             >
-              {pageNumber}
+              {page}
             </Button>
           );
         })}
@@ -236,8 +156,9 @@ export default function OrderHistory() {
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center bg-transparent"
-          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+          }
           disabled={currentPage === totalPages}
         >
           Next

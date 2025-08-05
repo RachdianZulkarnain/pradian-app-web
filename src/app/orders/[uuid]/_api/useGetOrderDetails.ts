@@ -1,105 +1,132 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { axiosInstance } from "@/lib/axios";
-import { useSession } from "next-auth/react";
 
-export type OrderData = {
-  event: {
-    title: string;
-    location: string;
-    dateRange: string;
-    time: string;
-    image: string;
-  };
-  ticket: {
-    type: string;
-    quantity: number;
-    price: number;
-  };
-  pricing: {
-    totalTicketPrice: number;
-    total: number;
-  };
-};
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 export const useOrderDetails = (uuid: string) => {
-  const [orderData, setOrderData] = useState<OrderData | null>(null);
+  const [orderData, setOrderData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
   const [voucherCode, setVoucherCode] = useState("");
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState("Payment Gateway");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("gateway");
 
-  const [paymentProof, setPaymentProof] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  const { data: session } = useSession();
-  // Fetch Order
-  const fetchOrder = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get(`/transactions/${uuid}`, {
-        headers: { Authorization: `Bearer ${session?.user.accessToken}` },
-      });
-      setOrderData(res.data);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch transaction detail by UUID
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!uuid || !token) return;
+      
 
-  // Apply Voucher
+      try {
+        setLoading(true);
+        const res = await fetch(`${API}/transactions/${uuid}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch transaction");
+
+        const data = await res.json();
+        setOrderData(data);
+        setSelectedPaymentMethod(data.paymentMethod || "gateway");
+      } catch (err) {
+        console.error("Fetch transaction error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [uuid, token]);
+
+  // Apply voucher
   const handleApplyVoucher = async () => {
     try {
-      const res = await axiosInstance.post("/vouchers/apply", {
-        uuid,
-        code: voucherCode,
+      const res = await fetch(`${API}/transactions/apply-voucher`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ uuid, code: voucherCode }),
       });
-      setOrderData((prev) =>
-        prev ? { ...prev, pricing: res.data.pricing } : prev,
-      );
-    } catch (err) {
-      console.error("Voucher invalid", err);
+
+      if (!res.ok) {
+        const errorRes = await res.json();
+        throw new Error(errorRes?.message || "Failed to apply voucher");
+      }
+
+      const data = await res.json();
+      setOrderData((prev: any) => ({
+        ...prev,
+        pricing: data.pricing,
+      }));
+      setVoucherCode("");
+    } catch (error) {
+      console.error("Apply voucher error:", error);
     }
   };
 
-  // Pilih metode pembayaran
+  // Confirm payment method
   const handlePay = async () => {
     try {
-      await axiosInstance.post(`/orders/${uuid}/pay`, {
-        method: selectedPaymentMethod,
+      const res = await fetch(`${API}/transactions/${uuid}/pay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ method: selectedPaymentMethod }),
       });
-      alert("Payment method selected!");
-    } catch (err) {
-      console.error("Failed to choose payment method", err);
+
+      if (!res.ok) {
+        const errorRes = await res.json();
+        throw new Error(errorRes?.message || "Failed to confirm payment");
+      }
+
+      const data = await res.json();
+      setOrderData((prev: any) => ({
+        ...prev,
+        paymentMethod: selectedPaymentMethod,
+      }));
+    } catch (error) {
+      console.error("Payment error:", error);
     }
   };
 
-  // Upload Bukti Pembayaran
-  const handleUploadProof = async () => {
-    if (!paymentProof) return alert("Please select a file.");
-
+  // Upload payment proof
+  const handleUploadProof = async (file: File) => {
     const formData = new FormData();
-    formData.append("file", paymentProof);
+    formData.append("uuid", uuid);
+    formData.append("paymentProof", file);
 
     try {
-      setUploading(true);
-      await axiosInstance.post(`/transactions/${uuid}/upload-proof`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await fetch(`${API}/transactions/payment-proof`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
       });
-      alert("Proof uploaded successfully!");
-    } catch (err) {
-      console.error("Upload failed", err);
-      alert("Upload failed. Please try again.");
-    } finally {
-      setUploading(false);
+
+      if (!res.ok) {
+        const errorRes = await res.json();
+        throw new Error(errorRes?.message || "Upload failed");
+      }
+
+      const data = await res.json();
+      setOrderData((prev: any) => ({
+        ...prev,
+        status: "WAITING_FOR_CONFIRMATION",
+        paymentProof: data.paymentProof,
+      }));
+    } catch (error) {
+      console.error("Upload proof error:", error);
     }
   };
-
-  useEffect(() => {
-    fetchOrder();
-  }, [uuid]);
 
   return {
     orderData,
@@ -108,9 +135,6 @@ export const useOrderDetails = (uuid: string) => {
     setVoucherCode,
     selectedPaymentMethod,
     setSelectedPaymentMethod,
-    paymentProof,
-    setPaymentProof,
-    uploading,
     handleApplyVoucher,
     handlePay,
     handleUploadProof,

@@ -1,12 +1,11 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import OrderDetails from "./components/OrderDetails";
 
-export default function OrderDetailPage() {
-  const { uuid } = useParams() as { uuid: string };
-
-  if (!uuid) return <p className="p-4">Invalid Order UUID</p>;
+export default async function OrderDetailPage({
+  params,
+}: {
+  params: Promise<{ uuid: string }>;
+}) {
+  const uuid = (await params).uuid;
 
   return <OrderDetails uuid={uuid} />;
 }
