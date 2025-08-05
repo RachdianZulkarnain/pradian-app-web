@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { applyVoucher } from "./voucher";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -9,6 +10,7 @@ export const useOrderDetails = (uuid: string) => {
   const [loading, setLoading] = useState(true);
   const [voucherCode, setVoucherCode] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("gateway");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -17,7 +19,6 @@ export const useOrderDetails = (uuid: string) => {
   useEffect(() => {
     const fetchOrder = async () => {
       if (!uuid || !token) return;
-      
 
       try {
         setLoading(true);
@@ -40,35 +41,27 @@ export const useOrderDetails = (uuid: string) => {
     };
 
     fetchOrder();
-  }, [uuid, token]);
+  }, [uuid]);
 
   // Apply voucher
   const handleApplyVoucher = async () => {
     try {
-      const res = await fetch(`${API}/transactions/apply-voucher`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ uuid, code: voucherCode }),
-      });
+      if (!voucherCode) throw new Error("Please enter a voucher code");
 
-      if (!res.ok) {
-        const errorRes = await res.json();
-        throw new Error(errorRes?.message || "Failed to apply voucher");
-      }
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Unauthorized");
 
-      const data = await res.json();
+      const result = await applyVoucher(uuid, voucherCode, token);
       setOrderData((prev: any) => ({
         ...prev,
-        pricing: data.pricing,
+        pricing: result.pricing,
       }));
       setVoucherCode("");
-    } catch (error) {
-      console.error("Apply voucher error:", error);
+    } catch (err: any) {
+      setErrorMessage(err.message);
     }
   };
+
 
   // Confirm payment method
   const handlePay = async () => {
@@ -100,11 +93,10 @@ export const useOrderDetails = (uuid: string) => {
   // Upload payment proof
   const handleUploadProof = async (file: File) => {
     const formData = new FormData();
-    formData.append("uuid", uuid);
     formData.append("paymentProof", file);
 
     try {
-      const res = await fetch(`${API}/transactions/payment-proof`, {
+      const res = await fetch(`${API}/transactions/${uuid}/payment-proof`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -138,5 +130,6 @@ export const useOrderDetails = (uuid: string) => {
     handleApplyVoucher,
     handlePay,
     handleUploadProof,
+    errorMessage,
   };
 };

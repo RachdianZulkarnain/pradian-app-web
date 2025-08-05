@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const useCreateVoucher = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const useCreateVoucher = () => {
         "Gagal membuat voucher:",
         error?.response?.data || error.message,
       );
-      alert(
+      toast.error(
         "Gagal membuat voucher: " +
           (error?.response?.data?.message || error.message),
       );
