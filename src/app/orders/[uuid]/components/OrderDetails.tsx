@@ -1,146 +1,123 @@
 "use client";
 
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useOrderDetails } from "../_api/useGetOrderDetails";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import useGetTransaction from "../../_hooks/useGetTransaction";
+import { format } from "date-fns";
 
 type OrderDetailsProps = {
   uuid: string;
 };
 
 const OrderDetails = ({ uuid }: OrderDetailsProps) => {
-  const {
-    orderData,
-    loading,
-    voucherCode,
-    setVoucherCode,
-    selectedPaymentMethod,
-    setSelectedPaymentMethod,
-    handleApplyVoucher,
-    handlePay,
-  } = useOrderDetails(uuid);
+  const [paymentProof, setPaymentProof] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [timeLeft, setTimeLeft] = useState(14 * 60 + 55);
+  const { data: transaction, isPending } = useGetTransaction(uuid);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
-  const formatCurrency = (amount: number) =>
-    `Rp ${amount.toLocaleString("id-ID")}`;
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
-  };
-
-  if (loading || !orderData)
-    return <p className="py-10 text-center">Loading order...</p>;
+  if (!transaction || !transaction.transactionDetail) {
+    return <div>Order not found</div>;
+  }
 
   return (
-    <div className="mx-auto max-w-3xl p-4">
+    <div className="container mx-auto p-4 md:p-6">
+      <h2 className="mb-6 text-xl font-semibold">Order Detail</h2>
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* Kiri */}
+        {/* LEFT */}
         <div className="space-y-6 md:col-span-2">
-          {/* Timer */}
-          <div className="rounded bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
-            Complete your payment before <strong>{formatTime(timeLeft)}</strong>
+          <div className="rounded bg-blue-100 px-4 py-2 text-sm text-blue-700">
+            Your payment is pending. Please complete before{" "}
+            <strong>timeleft</strong>
           </div>
 
-          {/* Event Info */}
-          <div className="flex items-start gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <Image
-              src={orderData.event.image}
+              src="/assets/1.webp"
               alt="Event"
-              width={120}
+              width={160}
               height={120}
               className="rounded object-cover"
             />
             <div>
-              <h2 className="text-xl font-semibold">{orderData.event.title}</h2>
+              <h3 className="text-lg font-semibold">
+                {transaction?.event?.title}
+              </h3>
               <p className="text-sm text-gray-600">
-                {orderData.event.location}
+                {transaction.event?.location}
               </p>
               <p className="text-sm text-gray-600">
-                {orderData.event.dateRange}
+                {format(new Date(transaction.event!.startDate), "dd MMM yyyy")}{" "}
+                - {format(new Date(transaction.event!.endDate), "dd MMM yyyy")}
               </p>
-              <p className="text-sm text-gray-600">{orderData.event.time}</p>
             </div>
           </div>
 
-          {/* Tiket */}
-          <div>
-            <h3 className="mb-2 font-semibold">Ticket</h3>
-            <div className="space-y-1 rounded border p-3 text-sm">
-              <div className="flex justify-between">
-                <span>
-                  {orderData.ticket.type} x{orderData.ticket.quantity}
-                </span>
-                <span>{formatCurrency(orderData.ticket.price)}</span>
-              </div>
-              <div className="flex justify-between font-medium">
-                <span>Total Ticket</span>
-                <span>
-                  {formatCurrency(orderData.pricing.totalTicketPrice)}
-                </span>
-              </div>
+          {/* Ticket Info */}
+          <div className="border-t pt-4">
+            <div className="flex items-center gap-2 font-semibold">
+              🎟️ {transaction?.transactionDetail[0]?.ticket.title}
             </div>
+            <p className="text-sm text-gray-600">
+              {transaction?.transactionDetail[0]?.qty} ticket
+            </p>
+            <p className="mt-1 text-right font-medium">
+              {" "}
+              {transaction?.transactionDetail[0]?.price}
+            </p>
           </div>
         </div>
 
-        {/* Kanan */}
+        {/* RIGHT */}
         <div className="space-y-6">
-          {/* Voucher */}
-          <div>
-            <h3 className="mb-2 font-semibold">Apply Voucher</h3>
-            <div className="flex gap-2">
-              <input
-                value={voucherCode}
-                onChange={(e) => setVoucherCode(e.target.value)}
-                className="w-full rounded border px-3 py-2 text-sm"
-                placeholder="Enter voucher code"
-              />
-              <Button onClick={handleApplyVoucher} variant="outline">
-                Apply
-              </Button>
-            </div>
-          </div>
-
-          {/* Payment Method */}
-          <div>
-            <h3 className="mb-2 font-semibold">Payment Method</h3>
-            <select
-              className="w-full rounded border px-3 py-2 text-sm"
-              value={selectedPaymentMethod}
-              onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-            >
-              <option>Payment Gateway</option>
-              <option>Bank Transfer</option>
-            </select>
-          </div>
-
-          {/* Order Summary */}
-          <div className="space-y-2 rounded border bg-gray-50 p-4 text-sm">
+          {/* Pricing */}
+          <div className="space-y-2 rounded border bg-white p-4 text-sm">
             <div className="flex justify-between">
-              <span>Ticket Price</span>
-              <span>{formatCurrency(orderData.pricing.totalTicketPrice)}</span>
+              <span>Total ticket price</span>
+              <span> {transaction?.transactionDetail[0]?.price}</span>
             </div>
             <div className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>{formatCurrency(orderData.pricing.total)}</span>
+              <span>
+                {" "}
+                {transaction?.transactionDetail[0]?.qty *
+                  transaction?.transactionDetail[0]?.price}
+              </span>
             </div>
           </div>
 
-          <Button
-            onClick={handlePay}
-            className="w-full bg-orange-500 hover:bg-orange-600"
-          >
-            Pay
-          </Button>
+          {/* Upload Proof */}
+          <div className="space-y-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setPaymentProof(e.target.files?.[0] ?? null)}
+              ref={fileInputRef}
+              className="text-sm"
+            />
+            <Button className="w-full bg-orange-500 text-white hover:bg-orange-600">
+              Upload Payment Proof
+            </Button>
+          </div>
+
+          {/* Bank Info */}
+          <div className="border-t pt-4 text-sm">
+            <h4 className="mb-1 font-semibold">Bank Detail</h4>
+            <p>
+              <strong>Bank Name:</strong> BCA
+            </p>
+            <p>
+              <strong>Account Name:</strong> PT Suka Suka
+            </p>
+            <p>
+              <strong>Account Number:</strong> 123123123
+            </p>
+          </div>
         </div>
       </div>
     </div>

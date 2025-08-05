@@ -30,6 +30,6 @@
     "src/types/event.ts",
     "src/lib/_api/create-transaction",
     "src/lib/_api/get-transaction.ts"
-  ],
+, "src/app/orders/_hooks/useOrderDetails"  ],
   "exclude": ["node_modules"]
 }

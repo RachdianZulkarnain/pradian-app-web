@@ -1,9 +1,7 @@
-import OrderHistory from "./[uuid]/components/OrderHistory"
+import OrderHistory from "./[uuid]/components/OrderHistory";
 
 const orders = () => {
-  return (
-    <OrderHistory />
-  )
-}
+  return <OrderHistory />;
+};
 
-export default orders
+export default orders;
