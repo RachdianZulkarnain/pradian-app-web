@@ -1,127 +1,277 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+import { MapPin, Calendar, Ticket } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import useGetTransaction from "../../_hooks/useGetTransaction";
+import useUploadPaymentProof from "../../_hooks/useUploadPaymentProof";
+import { applyVoucher } from "../_api/voucher";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 type OrderDetailsProps = {
   uuid: string;
 };
 
-const OrderDetails = ({ uuid }: OrderDetailsProps) => {
+export default function OrderDetails({ uuid }: OrderDetailsProps) {
+  const [voucherCode, setVoucherCode] = useState("");
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [showUpload, setShowUpload] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [total, setTotal] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const { data: transaction, isPending } = useGetTransaction(uuid);
+  const { mutateAsync: uploadProof, isPending: isUploading } =
+    useUploadPaymentProof(uuid);
 
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+  const ticket = transaction?.transactionDetail?.[0];
+  const baseTotal = (ticket?.qty ?? 0) * (ticket?.price ?? 0);
 
-  if (!transaction || !transaction.transactionDetail) {
-    return <div>Order not found</div>;
-  }
+  useEffect(() => {
+    if (transaction) {
+      toast.success("Checkout success!");
+    }
+  }, [transaction]);
+
+  const handleApplyVoucher = async () => {
+    try {
+      setErrorMessage("");
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Unauthorized");
+      const res = await applyVoucher(uuid, voucherCode, token);
+      setTotal(res.pricing.total);
+    } catch (err: any) {
+      setErrorMessage(err.message);
+    }
+  };
+
+  const formatStatus = (status: string) =>
+    status
+      .replace(/_/g, " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+  if (isPending) return <div>Loading...</div>;
+  if (!transaction || !ticket) return <div>Order not found</div>;
 
   return (
-    <div className="container mx-auto p-4 md:p-6">
-      <h2 className="mb-6 text-xl font-semibold">Order Detail</h2>
+    <div className="mx-auto min-h-screen max-w-7xl p-4 sm:p-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Left Content */}
+        <div className="space-y-6 lg:col-span-2">
+          <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+            Order Detail
+          </h1>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* LEFT */}
-        <div className="space-y-6 md:col-span-2">
-          <div className="rounded bg-blue-100 px-4 py-2 text-sm text-blue-700">
-            Your payment is pending. Please complete before{" "}
-            <strong>timeleft</strong>
-          </div>
+          <Card>
+            <CardContent className="space-y-6 p-6">
+              <div className="flex flex-col gap-4 md:flex-row">
+                {!!transaction?.event?.thumbnail && (
+                  <Image
+                    src={transaction.event.thumbnail}
+                    alt="Event Thumbnail"
+                    width={300}
+                    height={200}
+                    className="rounded-lg object-cover"
+                  />
+                )}
+                <div className="flex-1 space-y-2">
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {transaction?.event?.title}
+                  </h2>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <MapPin className="mr-2 h-4 w-4 text-orange-500" />
+                    {transaction?.event?.location}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Calendar className="mr-2 h-4 w-4 text-orange-500" />
+                    {transaction?.event?.startDate &&
+                      format(
+                        new Date(transaction.event.startDate),
+                        "dd MMM yyyy",
+                      )}{" "}
+                    -{" "}
+                    {transaction?.event?.endDate &&
+                      format(
+                        new Date(transaction.event.endDate),
+                        "dd MMM yyyy",
+                      )}
+                  </div>
+                </div>
+              </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <Image
-              src="/assets/1.webp"
-              alt="Event"
-              width={160}
-              height={120}
-              className="rounded object-cover"
-            />
-            <div>
-              <h3 className="text-lg font-semibold">
-                {transaction?.event?.title}
-              </h3>
-              <p className="text-sm text-gray-600">
-                {transaction.event?.location}
-              </p>
-              <p className="text-sm text-gray-600">
-                {format(new Date(transaction.event!.startDate), "dd MMM yyyy")}{" "}
-                - {format(new Date(transaction.event!.endDate), "dd MMM yyyy")}
-              </p>
-            </div>
-          </div>
+              {/* Ticket Info */}
+              <div className="border-t pt-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 font-semibold text-gray-900">
+                      <Ticket className="h-4 w-4 text-orange-500" />
+                      {ticket.ticket.title}
+                    </div>
+                    <p className="text-sm text-gray-600">{ticket.qty} ticket</p>
+                  </div>
+                  <p className="text-right font-bold">Rp {ticket.price}</p>
+                </div>
+              </div>
 
-          {/* Ticket Info */}
-          <div className="border-t pt-4">
-            <div className="flex items-center gap-2 font-semibold">
-              🎟️ {transaction?.transactionDetail[0]?.ticket.title}
-            </div>
-            <p className="text-sm text-gray-600">
-              {transaction?.transactionDetail[0]?.qty} ticket
-            </p>
-            <p className="mt-1 text-right font-medium">
-              {" "}
-              {transaction?.transactionDetail[0]?.price}
-            </p>
-          </div>
+              {/* Status from backend */}
+              {transaction.status && (
+                <div
+                  className={`rounded p-3 text-sm font-medium ${
+                    transaction.status === "WAITING_FOR_PAYMENT"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : transaction.status === "PAID"
+                        ? "bg-green-100 text-green-800"
+                        : transaction.status === "REJECTED"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  Status: <strong>{formatStatus(transaction.status)}</strong>
+                </div>
+              )}
+
+              {/* Bank Info */}
+              <div className="space-y-1 text-sm text-gray-700">
+                <p>
+                  <strong>Bank Name:</strong> BCA
+                </p>
+                <p>
+                  <strong>Account Name:</strong> PT Suka Suka
+                </p>
+                <p>
+                  <strong>Account Number:</strong> 123123123
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* RIGHT */}
+        {/* Right Sidebar */}
         <div className="space-y-6">
-          {/* Pricing */}
-          <div className="space-y-2 rounded border bg-white p-4 text-sm">
-            <div className="flex justify-between">
-              <span>Total ticket price</span>
-              <span> {transaction?.transactionDetail[0]?.price}</span>
-            </div>
-            <div className="flex justify-between font-semibold">
-              <span>Total</span>
-              <span>
-                {" "}
-                {transaction?.transactionDetail[0]?.qty *
-                  transaction?.transactionDetail[0]?.price}
-              </span>
-            </div>
-          </div>
+          {/* Voucher */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Enter voucher code here"
+                  value={voucherCode}
+                  onChange={(e) => setVoucherCode(e.target.value)}
+                />
+                <Button onClick={handleApplyVoucher}>Apply</Button>
+              </div>
+              {errorMessage && (
+                <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+              )}
+            </CardContent>
+          </Card>
 
-          {/* Upload Proof */}
-          <div className="space-y-2">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setPaymentProof(e.target.files?.[0] ?? null)}
-              ref={fileInputRef}
-              className="text-sm"
-            />
-            <Button className="w-full bg-orange-500 text-white hover:bg-orange-600">
-              Upload Payment Proof
-            </Button>
-          </div>
+          {/* Price Summary */}
+          <Card>
+            <CardContent className="space-y-4 p-6">
+              <h3 className="text-lg font-semibold">Detail Price</h3>
+              <div className="flex justify-between text-sm">
+                <span>Total ticket price</span>
+                <span className="font-medium">Rp {ticket.price}</span>
+              </div>
+              <div className="flex justify-between border-t pt-3 font-semibold">
+                <span>Total</span>
+                <span>Rp {total ?? baseTotal}</span>
+              </div>
+              {!showUpload && (
+                <Button
+                  className="w-full bg-orange-500 text-white hover:bg-orange-600"
+                  onClick={() => setShowConfirmModal(true)}
+                >
+                  Pay
+                </Button>
+              )}
+            </CardContent>
+          </Card>
 
-          {/* Bank Info */}
-          <div className="border-t pt-4 text-sm">
-            <h4 className="mb-1 font-semibold">Bank Detail</h4>
-            <p>
-              <strong>Bank Name:</strong> BCA
-            </p>
-            <p>
-              <strong>Account Name:</strong> PT Suka Suka
-            </p>
-            <p>
-              <strong>Account Number:</strong> 123123123
-            </p>
-          </div>
+          {/* Upload Payment Proof */}
+          {showUpload && (
+            <Card>
+              <CardContent className="space-y-4 p-4">
+                <p className="text-sm font-semibold text-gray-700">
+                  Upload Payment Proof
+                </p>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPaymentProof(file);
+                      setPreviewImage(URL.createObjectURL(file));
+                    }
+                  }}
+                />
+                {!!previewImage && (
+                  <Image
+                    src={previewImage}
+                    alt="Preview"
+                    width={300}
+                    height={200}
+                    className="rounded-lg border"
+                  />
+                )}
+                <Button
+                  disabled={!paymentProof || isUploading}
+                  onClick={async () => {
+                    if (!paymentProof) return;
+                    await uploadProof({ paymentProof });
+                    setShowUpload(false);
+                    toast.success("Payment proof uploaded successfully!");
+                  }}
+                  className="bg-green-600 text-white hover:bg-green-700"
+                >
+                  {isUploading ? "Uploading..." : "Submit Payment Proof"}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
+
+      {/* Confirm Modal */}
+      {showConfirmModal && (
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
+          <div className="pointer-events-auto w-[90%] max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
+            <h2 className="mb-2 text-lg font-bold">Confirm Transaction</h2>
+            <p className="mb-4 text-sm text-gray-600">
+              Are you sure you want to proceed with this transaction? This
+              action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowConfirmModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-orange-500 text-white hover:bg-orange-600"
+                onClick={() => {
+                  setShowUpload(true);
+                  setShowConfirmModal(false);
+                  toast.info(
+                    "Waiting for payment. Please upload your payment proof.",
+                  );
+                }}
+              >
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-export default OrderDetails;
+}

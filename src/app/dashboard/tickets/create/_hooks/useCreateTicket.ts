@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface TicketPayload {
   title: string;
@@ -36,12 +37,12 @@ const useCreateTicket = () => {
       return response.data;
     },
     onSuccess: async () => {
-      alert("Create ticket success");
+      toast.success("Create ticket success");
       await queryClient.invalidateQueries({ queryKey: ["tickets"] });
       router.push("/dashboard/voucher/create");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {
-      alert(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Something went wrong!");
     },
   });
 };

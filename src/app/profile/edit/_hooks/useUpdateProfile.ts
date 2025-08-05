@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Payload {
   name: string;
@@ -32,13 +33,13 @@ export const useUpdateProfile = () => {
     },
 
     onSuccess: async () => {
-      alert("Profile updated successfully");
+      toast.success("Profile updated successfully");
       await queryClient.invalidateQueries({ queryKey: ["profile"] });
       router.push("/profile");
     },
 
     onError: (error: AxiosError<{ message: string; code: number }>) => {
-      alert(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Something went wrong!");
     },
   });
 };
