@@ -13,14 +13,16 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useUpdateEventStatus } from "./_hooks/useUpdateEventStatus";
 
 export type EventRow = {
+  id: number;
   thumbnail?: string | null;
   title: string;
-  status: "Active" | "Draft";
+  status: "ACTIVE" | "DRAFT";
   location: string;
-  startDate: string; // ISO string
-  endDate: string; // ISO string
+  startDate: string; 
+  endDate: string; 
 };
 
 export const columns: ColumnDef<EventRow>[] = [
@@ -28,10 +30,10 @@ export const columns: ColumnDef<EventRow>[] = [
     accessorKey: "thumbnail",
     header: "Thumbnail",
     cell: ({ row }) => {
-      const src = row.getValue("thumbnail");
+      const src = row.getValue("thumbnail") as string | null;
       return src ? (
         <Image
-          src=" "
+          src={src}
           alt="Thumbnail"
           width={64}
           height={40}
@@ -59,22 +61,20 @@ export const columns: ColumnDef<EventRow>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const initialStatus = row.getValue("status") as "Active" | "Draft";
-      const [status, setStatus] = useState<"Active" | "Draft">(initialStatus);
+      const initialStatus = row.getValue("status") as "ACTIVE" | "DRAFT";
+      const [status, setStatus] = useState<"ACTIVE" | "DRAFT">(initialStatus);
+      const { mutate } = useUpdateEventStatus();
 
       const statusColor =
-        status === "Active" ? "text-green-600" : "text-gray-500";
+        status === "ACTIVE" ? "text-green-600" : "text-gray-500";
 
-      const handleStatusChange = (newStatus: "Active" | "Draft") => {
+      const handleStatusChange = (newStatus: "ACTIVE" | "DRAFT") => {
         setStatus(newStatus);
-        toast.success(
-          `Event "${row.getValue("title")}" updated to ${newStatus}`,
-          {
-            duration: 3000,
-          },
-        );
+        mutate({
+          eventId: row.original.id,
+          status: newStatus.toUpperCase() as "ACTIVE" | "DRAFT",
+        });
 
-        // Optional: Sync with backend
       };
 
       return (
@@ -92,7 +92,7 @@ export const columns: ColumnDef<EventRow>[] = [
             {["Active", "Draft"].map((option) => (
               <DropdownMenuItem
                 key={option}
-                onClick={() => handleStatusChange(option as "Active" | "Draft")}
+                onClick={() => handleStatusChange(option as "ACTIVE" | "DRAFT")}
               >
                 {option}
               </DropdownMenuItem>

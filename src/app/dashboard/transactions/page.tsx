@@ -1,48 +1,45 @@
-// app/(dashboard)/transactions/page.tsx
-"use client"
+"use client";
 
-import { DataTable } from "@/components/data-table"
-import { columns, TransactionRow } from "./columns"
+import { useState } from "react";
+import { columns } from "./columns";
+import { DataTable } from "@/components/data-table";
+import { useGetAdminTransactions } from "./_hooks/useGetTransactions";
 
-export default function TransactionPage() {
-  // Mock transaction data
-  const data: TransactionRow[] = [
-    {
-      eventName: "Tech Conference 2025",
-      Email: "alice@example.com",
-      quantity: 2,
-      totalTicketPrice: 500000,
-      voucherUsed: "TECH25",
-      pointsUsed: 20000,
-      finalPrice: 480000,
-      status: "PAID",
-    },
-    {
-      eventName: "Startup Expo",
-      Email: "bob@example.com",
-      quantity: 1,
-      totalTicketPrice: 250000,
-      voucherUsed: null,
-      pointsUsed: null,
-      finalPrice: 250000,
-      status: "WAITING_FOR_PAYMENT",
-    },
-    {
-      eventName: "DevTalk 2025",
-      Email: "carol@example.com",
-      quantity: 3,
-      totalTicketPrice: 750000,
-      voucherUsed: "DEVTALK",
-      pointsUsed: 50000,
-      finalPrice: 700000,
-      status: "REJECT",
-    },
-  ]
+const TransactionPage = () => {
+  const [page, setPage] = useState(1);
+  const take = 10;
+
+  const { data, isLoading, isError } = useGetAdminTransactions({ page, take });
+
+  if (isLoading) return <p>Loading transactions...</p>;
+  if (isError || !data || !data.meta) return <p>Failed to load transactions</p>;
+
+  const totalPages = Math.ceil(data.meta.total / take);
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">Transactions</h1>
-      <DataTable columns={columns} data={data} />
+    <div>
+      <h1 className="mb-4 text-xl font-semibold">Transactions</h1>
+      <DataTable columns={columns} data={data.data} />
+
+      <div className="mt-4 flex justify-between">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <span>
+          Page {data.meta.page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
-  )
-}
+  );
+};
+
+export default TransactionPage;

@@ -3,19 +3,7 @@
 import axiosInstance from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-
-export type Event = {
-  id: number;
-  title: string;
-  location: string;
-  status: "DRAFT" | "ACTIVE";
-  startDate: string;
-  endDate: string;
-  thumbnail?: string | null;
-  tickets: {
-    price: number;
-  }[];
-};
+import { VoucherRow } from "../columns";
 
 type Meta = {
   page: number;
@@ -23,12 +11,12 @@ type Meta = {
   total: number;
 };
 
-type GetEventsResponse = {
-  data: Event[];
+type GetVouchersResponse = {
+  data: VoucherRow[];
   meta: Meta;
 };
 
-export const useGetEvents = ({
+export const useGetVouchers = ({
   page = 1,
   take = 10,
 }: {
@@ -37,16 +25,16 @@ export const useGetEvents = ({
 }) => {
   const session = useSession();
 
-  return useQuery<GetEventsResponse>({
-    queryKey: ["my-events", page, take],
+  return useQuery<GetVouchersResponse>({
+    queryKey: ["vouchers", page, take],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<GetEventsResponse>(
-        `/events/admin?take=${take}&page=${page}`,
+      const { data } = await axiosInstance.get<GetVouchersResponse>(
+        `/vouchers/admin?take=${take}&page=${page}`,
         {
           headers: {
             Authorization: `Bearer ${session.data?.user.accessToken}`,
           },
-        }
+        },
       );
       return data;
     },
