@@ -80,10 +80,10 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/dashboard/setting">
+              <Link href="/dashboard/settings">
                 <DropdownMenuItem>
                   <IconUserCircle />
-                  Setting
+                  Settings
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>

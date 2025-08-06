@@ -13,17 +13,16 @@ import { Label } from "@/components/ui/label";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Wrench } from "lucide-react";
 import * as Yup from "yup";
-import useRegister from "../_hooks/useRegister";
+import useRegisterAdmin from "./_hooks/useRegisterAdmin";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required").min(3),
   email: Yup.string().required("Email is required").email(),
   password: Yup.string().required("Password is required").min(6),
-  referralCode: Yup.string(), // Optional
 });
 
 const SignUp = () => {
-  const { mutateAsync: register, isPending } = useRegister();
+  const { mutateAsync: register, isPending } = useRegisterAdmin();
 
   return (
     <main className="container mx-auto">

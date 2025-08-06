@@ -30,7 +30,7 @@ const AccountMenu = ({
           <span>My Account</span>
           <Sun className="text-muted-foreground h-4 w-4" />
         </DropdownMenuLabel>
-        <p className="text-muted-foreground px-3 text-xs">{points} points</p>
+
 
         <DropdownMenuSeparator />
 
