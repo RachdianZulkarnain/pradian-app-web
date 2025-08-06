@@ -34,7 +34,7 @@ export const getOrders = async (
       throw new Error("Unauthorized: No access token found in session.");
     }
 
-    const response = await axiosInstance.get<OrderResponse>("/transactions", {
+    const response = await axiosInstance.get<OrderResponse>("/transactions/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

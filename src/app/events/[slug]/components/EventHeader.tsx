@@ -62,7 +62,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
 
       setEvent(fetchedEvent);
 
-      const ticketList = await getTicketsByEvent(Number(fetchedEvent.id));
+      const ticketList = await getTicketsByEvent(fetchedEvent.slug);
       setTickets(ticketList);
 
       const voucherList = await getVouchersByEvent(Number(fetchedEvent.id));
