@@ -18,22 +18,27 @@ export function SectionCards() {
   if (!data) return <p>No data</p>;
 
   return (
-    <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
       {/* Total Revenue */}
-      <Card>
+      <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader className="flex flex-col gap-2">
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+            Total Revenue
+          </CardDescription>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl font-semibold">
+            <CardTitle className="text-xl font-black tracking-wide text-gray-900">
               {showRevenue
                 ? `Rp ${data.totalRevenue.toLocaleString()}`
-                : "**** **** **** ***"}
+                : "**** **** ****"}
             </CardTitle>
-            <button onClick={() => setShowRevenue((prev) => !prev)}>
+            <button
+              onClick={() => setShowRevenue((prev) => !prev)}
+              className="text-gray-600 transition-colors hover:text-blue-600"
+            >
               {showRevenue ? (
-                <EyeOff className="ml-2  h-5 w-5" />
+                <EyeOff className="h-5 ml-2 w-5" />
               ) : (
-                <Eye className="ml-2 mb-2 h-5 w-5" />
+                <Eye className="h-5 ml-2 w-5" />
               )}
             </button>
           </div>
@@ -41,30 +46,36 @@ export function SectionCards() {
       </Card>
 
       {/* Total Events */}
-      <Card>
+      <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader>
-          <CardDescription>Total Events</CardDescription>
-          <CardTitle className="text-2xl font-semibold">
+          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+            Total Events
+          </CardDescription>
+          <CardTitle className="text-3xl font-black tracking-wide text-gray-900">
             +{data.totalEvents}
           </CardTitle>
         </CardHeader>
       </Card>
 
       {/* Total Tickets */}
-      <Card>
+      <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader>
-          <CardDescription>Total Tickets</CardDescription>
-          <CardTitle className="text-2xl font-semibold">
+          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+            Total Tickets
+          </CardDescription>
+          <CardTitle className="text-3xl font-black tracking-wide text-gray-900">
             +{data.totalTickets}
           </CardTitle>
         </CardHeader>
       </Card>
 
       {/* Total Vouchers */}
-      <Card>
+      <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader>
-          <CardDescription>Total Vouchers</CardDescription>
-          <CardTitle className="text-2xl font-semibold">
+          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+            Total Vouchers
+          </CardDescription>
+          <CardTitle className="text-3xl font-black tracking-wide text-gray-900">
             +{data.totalVouchers}
           </CardTitle>
         </CardHeader>

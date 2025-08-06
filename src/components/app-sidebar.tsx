@@ -49,7 +49,7 @@ const data = {
         {
           title: "Attendees",
           url: "/dashboard/events/attendees",
-        }
+        },
       ],
     },
     {
@@ -102,8 +102,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+    <Sidebar
+      collapsible="offcanvas"
+      className="border-r-4 border-gray-900 bg-white shadow-[6px_0_0_0_rgba(0,0,0,1)]"
+      {...props}
+    >
+      {/* Header with Logo */}
+      <SidebarHeader className="border-b-4 border-gray-900 px-4 py-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -118,18 +123,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   height={50}
                   className="object-contain"
                 />
-                <span className="text-xl font-bold text-black">
-                  Pradian<span className="text-red-600">Event</span>
+                <span className="text-xl font-black uppercase text-black">
+                  Pradian
+                  <span className="text-red-600">Event</span>
                 </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+
+      {/* Navigation */}
+      <SidebarContent className="px-3 py-4">
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
+
+      {/* Footer with User Info */}
+      <SidebarFooter className="border-t-4 border-gray-900 px-3 py-4">
         <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
