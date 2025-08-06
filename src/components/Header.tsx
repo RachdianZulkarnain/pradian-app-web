@@ -14,118 +14,105 @@ const Header = () => {
   const pathName = usePathname();
   const { data: session } = useSession();
 
-  if (pathName === "/login" || pathName === "/register") {
-    return null;
-  }
+  // Hide navbar on dashboard pages
+  const hidePaths = [
+    "/login",
+    "/register",
+    "/dashboard",
+    "/dashboard/events",
+    "/dashboard/events/create",
+    "/dashboard/transactions",
+    "/dashboard/transactions/manual",
+    "/dashboard/tickets",
+    "/dashboard/tickets/create",
+    "/dashboard/voucher",
+    "/dashboard/voucher/create",
+    "/dashboard/settings",
+    "/dashboard/settings/bank-details",
+    "/dashboard/settings/change-password",
+  ];
 
-  if (pathName === "/dashboard" || pathName === "/dashboard") {
-    return null;
-  }
-
-  if (
-    pathName === "/dashboard/events" ||
-    pathName === "/dashboard/events/create"
-  ) {
-    return null;
-  }
-  if (
-    pathName === "/dashboard/transactions" ||
-    pathName === "/dashboard/transactions/manual"
-  ) {
-    return null;
-  }
-
-  if (
-    pathName === "/dashboard/tickets" ||
-    pathName === "/dashboard/tickets/create"
-  ) {
-    return null;
-  }
-
-  if (
-    pathName === "/dashboard/voucher" ||
-    pathName === "/dashboard/voucher/create"
-  ) {
-    return null;
-  }
-
-  if (
-    pathName === "/dashboard/settings" ||
-    pathName === "/dashboard/settings/bank-details" ||
-    pathName === "/dashboard/settings/change-password"
-  ) {
-    return null;
-  }
+  if (hidePaths.includes(pathName)) return null;
 
   return (
-    <header className="top-0 right-0 left-0 z-50 border-b bg-white shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3 sm:py-4">
+    <header className="top-0 z-50 border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden rounded-2xl">
+      <div className="container mx-auto flex items-center justify-between px-4 py-4">
+        {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/assets/pradian-logo1.png"
             alt="Pradian Logo"
-            width={100}
-            height={100}
+            width={40}
+            height={40}
             className="object-contain"
           />
-          <span className="text-xl font-bold text-black">
+          <span className="text-xl font-black uppercase tracking-tight text-black">
             Pradian<span className="text-red-600">Event</span>
           </span>
         </Link>
 
+        {/* Desktop Nav */}
         <div className="hidden items-center space-x-2 md:flex">
           {session ? (
             <AccountMenu email={session.user?.email} points={0} />
           ) : (
             <>
-              <Button className="px-4 py-2 text-sm sm:text-base">
+              <Button
+                variant="default"
+                className="rounded-none border-2 border-black bg-blue-600 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-blue-700"
+              >
                 <Link href="/login">Login</Link>
               </Button>
-              <Button className="px-4 py-2 text-sm sm:text-base">
+              <Button
+                variant="default"
+                className="rounded-none border-2 border-black bg-green-600 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-green-700"
+              >
                 <Link href="/register">Sign-Up</Link>
               </Button>
             </>
           )}
         </div>
 
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden"
+          className="md:hidden rounded border-2 border-black p-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? (
-            <X className="h-6 w-6 text-gray-700" />
+            <X className="h-6 w-6 text-black" />
           ) : (
-            <Menu className="h-6 w-6 text-gray-700" />
+            <Menu className="h-6 w-6 text-black" />
           )}
         </button>
       </div>
 
+      {/* Mobile Dropdown */}
       {mobileMenuOpen && (
-        <div className="absolute top-14 right-2 z-50 w-60 rounded-md border bg-white shadow-lg md:hidden">
-          <div className="px-4 py-3">
-            <p className="text-sm font-medium">Menu</p>
-            <p className="text-xs text-gray-500">
+        <div className="absolute right-4 top-[72px] z-50 w-60 rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hidden">
+          <div className="border-b border-black px-4 py-3">
+            <p className="text-sm font-bold text-black">Menu</p>
+            <p className="text-xs text-gray-600">
               {session ? session.user?.email : "Not logged in"}
             </p>
           </div>
-          <div className="border-t">
+          <div className="flex flex-col divide-y divide-black">
             {!session ? (
               <>
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
                 >
-                  <LogIn className="h-4 w-4 text-gray-700" />
+                  <LogIn className="h-4 w-4 text-black" />
                   Login
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
                 >
-                  <UserPlus className="h-4 w-4 text-gray-700" />
+                  <UserPlus className="h-4 w-4 text-black" />
                   Register
                 </Link>
               </>
@@ -135,9 +122,9 @@ const Header = () => {
                   setMobileMenuOpen(false);
                   signOut({ callbackUrl: "/" });
                 }}
-                className="flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+                className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
               >
-                <LogOut className="h-4 w-4 text-gray-700" />
+                <LogOut className="h-4 w-4 text-black" />
                 Sign Out
               </button>
             )}

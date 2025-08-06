@@ -1,145 +1,272 @@
 "use client";
+
+import { useState } from "react";
+import { Field, Form, Formik, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Wrench } from "lucide-react";
-import * as Yup from "yup";
-import useRegister from "./_hooks/useRegister";
+import {
+  Loader,
+  User,
+  Mail,
+  Lock,
+  Gift,
+  ArrowRight,
+  EyeOff,
+  Eye,
+} from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import useRegister from "./_hooks/useRegister";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required").min(3),
   email: Yup.string().required("Email is required").email(),
   password: Yup.string().required("Password is required").min(6),
-  referralCode: Yup.string(), // Optional
+  referralCode: Yup.string(),
 });
 
-const SignUp = () => {
+export default function SignUp() {
   const { mutateAsync: register, isPending } = useRegister();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <main className="container mx-auto">
-      <Card className="mx-auto mt-25 w-full max-w-sm">
-        <Formik
-          initialValues={{
-            name: "",
-            email: "",
-            password: "",
-            referralCode: "",
-          }}
-          validationSchema={validationSchema}
-          onSubmit={async (values) => {
-            await register(values);
-          }}
-        >
-          <Form className="space-y-4">
-            <CardHeader>
-              <CardTitle>Register your account</CardTitle>
-              <CardDescription>
-                Enter your details to create your account
-              </CardDescription>
-            </CardHeader>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        {/* Header */}
+        <div className="space-y-6 text-center">
+          <div className="flex justify-center">
+            <Image
+              src="/assets/pradian-logo1.png"
+              alt="Pradian Logo"
+              width={250}
+              height={250}
+              className="object-contain w-[180px] sm:w-[200px] lg:w-[250px]"
+              priority
+            />
+          </div>
+          <div>
+            <h1 className="mb-2 text-3xl sm:text-4xl font-black text-gray-900">
+              JOIN US
+            </h1>
+            <div className="mx-auto mb-4 h-1 w-16 bg-red-500"></div>
+            <p className="font-medium text-gray-600 text-sm sm:text-base">
+              Create your PradianEvent account
+            </p>
+          </div>
+        </div>
 
-            <CardContent>
-              <div className="flex flex-col gap-6">
-                {/* Name */}
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Field
-                    name="name"
-                    as={Input}
-                    type="text"
-                    placeholder="Your name"
-                  />
-                  <ErrorMessage
-                    name="name"
-                    component="p"
-                    className="text-sm text-red-500"
-                  />
-                </div>
+        {/* Register Card */}
+        <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <CardContent className="p-6 sm:p-8">
+            <Formik
+              initialValues={{
+                name: "",
+                email: "",
+                password: "",
+                referralCode: "",
+              }}
+              validationSchema={validationSchema}
+              onSubmit={async (values) => {
+                try {
+                  await register(values);
+                } catch (err) {
+                  console.error("Registration failed", err);
+                }
+              }}
+            >
+              {({ errors, touched }) => (
+                <Form className="space-y-6">
+                  {/* Name */}
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="name"
+                      className="text-sm font-bold tracking-wide text-gray-900 uppercase"
+                    >
+                      Full Name
+                    </Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex w-12 items-center justify-center bg-blue-600">
+                        <User className="h-4 w-4 text-white" />
+                      </div>
+                      <Field
+                        name="name"
+                        as={Input}
+                        type="text"
+                        placeholder="Your full name"
+                        className={`h-14 pl-14 rounded-none border-2 border-gray-900 bg-white font-medium placeholder:text-gray-400 focus:ring-0 focus:border-blue-600 ${
+                          errors.name && touched.name
+                            ? "border-red-500 focus:border-red-500"
+                            : ""
+                        }`}
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="name"
+                      component="div"
+                      className="border-l-4 border-red-500 bg-red-50 p-2 text-sm font-medium text-red-500"
+                    />
+                  </div>
 
-                {/* Email */}
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Field
-                    name="email"
-                    as={Input}
-                    type="email"
-                    placeholder="Your email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="p"
-                    className="text-sm text-red-500"
-                  />
-                </div>
+                  {/* Email */}
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="email"
+                      className="text-sm font-bold tracking-wide text-gray-900 uppercase"
+                    >
+                      Email
+                    </Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex w-12 items-center justify-center bg-blue-600">
+                        <Mail className="h-4 w-4 text-white" />
+                      </div>
+                      <Field
+                        name="email"
+                        as={Input}
+                        type="email"
+                        placeholder="Your email"
+                        className={`h-14 pl-14 rounded-none border-2 border-gray-900 bg-white font-medium placeholder:text-gray-400 focus:ring-0 focus:border-blue-600 ${
+                          errors.email && touched.email
+                            ? "border-red-500 focus:border-red-500"
+                            : ""
+                        }`}
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="border-l-4 border-red-500 bg-red-50 p-2 text-sm font-medium text-red-500"
+                    />
+                  </div>
 
-                {/* Password */}
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Field
-                    name="password"
-                    as={Input}
-                    type="password"
-                    placeholder="Your password"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="p"
-                    className="text-sm text-red-500"
-                  />
-                </div>
+                  {/* Password */}
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="password"
+                      className="text-sm font-bold tracking-wide text-gray-900 uppercase"
+                    >
+                      Password
+                    </Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex w-12 items-center justify-center bg-blue-600">
+                        <Lock className="h-4 w-4 text-white" />
+                      </div>
+                      <Field
+                        name="password"
+                        as={Input}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a password"
+                        className={`h-14 pr-12 pl-14 rounded-none border-2 border-gray-900 bg-white font-medium placeholder:text-gray-400 focus:ring-0 focus:border-blue-600 ${
+                          errors.password && touched.password
+                            ? "border-red-500 focus:border-red-500"
+                            : ""
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute top-1/2 right-4 -translate-y-1/2 transform text-gray-600 hover:text-blue-600"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="border-l-4 border-red-500 bg-red-50 p-2 text-sm font-medium text-red-500"
+                    />
+                  </div>
 
-                {/* Referral Code */}
-                <div className="grid gap-2">
-                  <Label htmlFor="referralCode">Referral Code (optional)</Label>
-                  <Field
-                    name="referralCode"
-                    as={Input}
-                    type="text"
-                    placeholder="Enter referral code if any"
-                  />
-                  <ErrorMessage
-                    name="referralCode"
-                    component="p"
-                    className="text-sm text-red-500"
-                  />
-                </div>
-              </div>
-            </CardContent>
+                  {/* Referral Code */}
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="referralCode"
+                      className="text-sm font-bold tracking-wide text-gray-900 uppercase"
+                    >
+                      Referral Code (Optional)
+                    </Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex w-12 items-center justify-center bg-blue-600">
+                        <Gift className="h-4 w-4 text-white" />
+                      </div>
+                      <Field
+                        name="referralCode"
+                        as={Input}
+                        type="text"
+                        placeholder="Enter referral code"
+                        className="h-14 pl-14 rounded-none border-2 border-gray-900 bg-white font-medium placeholder:text-gray-400 focus:ring-0 focus:border-blue-600"
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="referralCode"
+                      component="div"
+                      className="text-sm font-medium text-red-500"
+                    />
+                  </div>
 
-            <CardFooter className="flex-col gap-2">
-              <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? <Wrench className="animate-spin" /> : "Register"}
-              </Button>
-            </CardFooter>
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold tracking-wide text-white uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                    disabled={isPending}
+                  >
+                    {isPending ? (
+                      <div className="flex items-center gap-3">
+                        <Loader className="h-5 w-5 animate-spin" />
+                        <span>REGISTERING...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <span>REGISTER</span>
+                        <ArrowRight className="h-5 w-5" />
+                      </div>
+                    )}
+                  </Button>
 
-            <div className="text-center text-sm text-gray-400">
-              Already have an account?{" "}
-              <Link href="/login" className="text-black hover:underline">
-                Login
-              </Link>
-            </div>
-            <div className="text-center text-sm text-gray-400">
-              Ready to take the stage?{" "}
-              <Link href="/register/organizer" className="text-black hover:underline">
-                Organize with us.
-              </Link>
-            </div>
-          </Form>
-        </Formik>
-      </Card>
-    </main>
+                  {/* Switch to Login */}
+                  <div className="pt-4 text-center">
+                    <p className="font-medium text-gray-900">
+                      Already have an account?
+                    </p>
+                    <Link
+                      href="/login"
+                      className="mt-2 inline-block border-2 border-gray-900 bg-red-500 px-6 py-2 font-bold tracking-wide text-white uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-colors hover:bg-red-600"
+                    >
+                      Sign In
+                    </Link>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
+        </Card>
+
+        {/* Terms */}
+        <div className="border-2 border-gray-900 bg-gray-100 p-4 mt-4 sm:mt-6">
+          <p className="text-center text-xs leading-relaxed font-medium text-gray-700">
+            By signing up, you agree to our{" "}
+            <a
+              href="#"
+              className="font-bold text-blue-600 underline transition-colors hover:text-blue-700"
+            >
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a
+              href="#"
+              className="font-bold text-red-500 underline transition-colors hover:text-red-600"
+            >
+              Privacy Policy
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default SignUp;
+}
