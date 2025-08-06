@@ -20,12 +20,14 @@ const NewestEvents = () => {
   });
 
   return (
-    <section className="container mx-auto mt-12 px-4 md:px-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-2xl font-semibold md:text-3xl">Newest Events</h3>
+    <section className="container mx-auto mt-12 px-4 md:px-12 lg:px-24">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-3xl font-bold text-black">
+          Newest <span className="text-red-600">Events</span>
+        </h3>
         <Link
           href="/events"
-          className="text-sm font-medium text-orange-500 hover:underline"
+          className="text-sm font-semibold text-red-600 hover:underline"
         >
           See all
         </Link>
@@ -36,9 +38,9 @@ const NewestEvents = () => {
           ? Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="space-y-3 overflow-hidden rounded-xl bg-zinc-900 p-4 shadow"
+                className="space-y-3 rounded-xl border-4 border-black bg-white p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
               >
-                <Skeleton className="aspect-[4/3] w-full rounded-md" />
+                <Skeleton className="aspect-[4/3] w-full rounded-lg" />
                 <Skeleton className="h-5 w-3/4" />
                 <Skeleton className="h-4 w-2/3" />
                 <Skeleton className="h-4 w-1/2" />
@@ -53,9 +55,9 @@ const NewestEvents = () => {
               return (
                 <div
                   key={event.id}
-                  className="overflow-hidden rounded-xl bg-zinc-900 shadow transition hover:shadow-lg"
+                  className="overflow-hidden rounded-xl border-4 border-black bg-white shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)]"
                 >
-                  <div className="relative aspect-[4/3] w-full">
+                  <div className="relative aspect-[4/3] w-full rounded-b-none">
                     <Link
                       href={`/events/${event.slug}`}
                       className="absolute inset-0 z-10"
@@ -64,27 +66,27 @@ const NewestEvents = () => {
                       src={event.thumbnail || "/placeholder.jpg"}
                       alt={event.title}
                       fill
-                      className="object-cover"
+                      className="rounded-t-[8px] object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
                   <div className="space-y-2 p-4">
-                    <h4 className="line-clamp-2 text-base font-semibold text-white">
+                    <h4 className="line-clamp-2 text-base font-bold text-black">
                       {event.title}
                     </h4>
-                    <p className="truncate text-sm text-sky-400">
+                    <p className="truncate text-sm text-gray-600">
                       {event.startDate && event.endDate
                         ? `${new Date(event.startDate).toLocaleDateString("id-ID")} – ${new Date(
                             event.endDate,
                           ).toLocaleDateString("id-ID")}`
                         : "-"}
                     </p>
-                    <p className="text-sm font-medium text-orange-400">
+                    <p className="text-sm font-semibold text-red-600">
                       {lowestPrice === 0
                         ? "Gratis"
                         : lowestPrice !== null
-                          ? `Rp ${formatPrice(lowestPrice)}`
-                          : "Belum tersedia"}
+                        ? `Rp ${formatPrice(lowestPrice)}`
+                        : "Belum tersedia"}
                     </p>
                   </div>
                 </div>

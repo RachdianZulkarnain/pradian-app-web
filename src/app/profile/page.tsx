@@ -37,7 +37,7 @@ export default function ProfilePage() {
 
     try {
       await updateMutation.mutateAsync({ name, pictureProfile });
-      setPictureProfile(null); // reset after upload
+      setPictureProfile(null);
     } catch {
       // error handled in hook
     }
@@ -69,17 +69,17 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto mt-10 flex max-w-4xl gap-8">
+    <div className="mx-auto mt-10 flex max-w-5xl gap-8 px-4">
       {/* Sidebar */}
-      <aside className="w-64 border-r pr-4">
-        <nav className="space-y-2">
+      <aside className="w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+        <nav className="space-y-2 font-bold text-gray-900 uppercase text-sm">
           <Link href="/profile">
-            <div className={cn("rounded-md px-3 py-2 text-sm font-medium", "bg-muted")}>
+            <div className="rounded-none border-2 border-gray-900 bg-muted px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
               Profile
             </div>
           </Link>
           <Link href="/profile/change-password">
-            <div className="hover:bg-muted rounded-md px-3 py-2 text-sm font-medium transition">
+            <div className="rounded-none border-2 border-gray-900 px-4 py-2 transition-colors hover:bg-muted shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
               Change Password
             </div>
           </Link>
@@ -87,10 +87,10 @@ export default function ProfilePage() {
       </aside>
 
       {/* Profile Details */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-8 border-4 border-gray-900 bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         {/* Header Section */}
         <div className="flex items-center gap-4">
-          <Avatar className="h-20 w-20 border">
+          <Avatar className="h-20 w-20 border-2 border-gray-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
             <AvatarImage
               src={
                 pictureProfile
@@ -99,52 +99,80 @@ export default function ProfilePage() {
               }
               alt="Profile"
             />
-            <AvatarFallback>{profile.name[0]}</AvatarFallback>
+            <AvatarFallback className="text-xl font-bold">
+              {profile.name[0]}
+            </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-xl font-semibold">{profile.name}</h2>
-            <p className="text-muted-foreground text-sm">{profile.email}</p>
+            <h2 className="text-xl font-black text-gray-900">
+              {profile.name}
+            </h2>
+            <p className="text-sm font-medium text-gray-500">
+              {profile.email}
+            </p>
           </div>
         </div>
 
         {/* Form Section */}
-        <div className="grid max-w-md gap-4">
+        <div className="grid max-w-md gap-6">
           {/* Editable Full Name */}
-          <div>
-            <Label htmlFor="name">Full Name</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-bold text-gray-900 uppercase">
+              Full Name
+            </Label>
             <Input
-              id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
               disabled={updateMutation.isPending}
+              className="h-14 rounded-none border-2 border-gray-900 font-medium placeholder:text-gray-400 focus:border-blue-600 focus:ring-0"
             />
           </div>
 
           {/* Read-only Email */}
-          <div>
-            <Label>Email</Label>
-            <Input value={profile.email} disabled />
+          <div className="space-y-2">
+            <Label className="text-sm font-bold text-gray-900 uppercase">
+              Email
+            </Label>
+            <Input
+              value={profile.email}
+              disabled
+              className="h-14 rounded-none border-2 border-gray-900 bg-gray-100"
+            />
           </div>
 
-          {/* Referral Code with Copy */}
+          {/* Referral Code */}
           <ReferralCodeInput code={profile.referralCode} />
 
           {/* Read-only Role */}
-          <div>
-            <Label>Role</Label>
-            <Input value={profile.role} disabled />
+          <div className="space-y-2">
+            <Label className="text-sm font-bold text-gray-900 uppercase">
+              Role
+            </Label>
+            <Input
+              value={profile.role}
+              disabled
+              className="h-14 rounded-none border-2 border-gray-900 bg-gray-100"
+            />
           </div>
 
           {/* Read-only Total Points */}
-          <div>
-            <Label>Total Points</Label>
-            <Input value={profile.referralPoints} disabled />
+          <div className="space-y-2">
+            <Label className="text-sm font-bold text-gray-900 uppercase">
+              Total Points
+            </Label>
+            <Input
+              value={profile.referralPoints}
+              disabled
+              className="h-14 rounded-none border-2 border-gray-900 bg-gray-100"
+            />
           </div>
 
           {/* Profile Picture Upload */}
-          <div>
-            <Label>Profile Picture</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-bold text-gray-900 uppercase">
+              Profile Picture
+            </Label>
             <Input
               type="file"
               accept="image/*"
@@ -153,12 +181,16 @@ export default function ProfilePage() {
                 const file = e.target.files?.[0];
                 if (file) setPictureProfile(file);
               }}
+              className="h-14 rounded-none border-2 border-gray-900"
             />
-
           </div>
 
           {/* Save Button */}
-          <Button onClick={handleSubmit} disabled={updateMutation.isPending}>
+          <Button
+            onClick={handleSubmit}
+            disabled={updateMutation.isPending}
+            className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold uppercase tracking-wide text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+          >
             {updateMutation.isPending ? "Saving..." : "Save Changes"}
           </Button>
         </div>

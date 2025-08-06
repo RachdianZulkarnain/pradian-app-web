@@ -8,14 +8,10 @@ import { usePathname } from "next/navigation";
 export function SiteHeader() {
   const pathname = usePathname();
 
-  // Split path into segments
   const pathSegments = pathname.split("/").filter(Boolean);
 
-  // Build breadcrumb items with corresponding URLs
   const breadcrumbs = pathSegments.map((segment, index) => {
     const href = "/" + pathSegments.slice(0, index + 1).join("/");
-
-    // Format the segment (replace hyphens, capitalize)
     const label = segment
       .replace(/-/g, " ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
@@ -24,27 +20,33 @@ export function SiteHeader() {
   });
 
   return (
-    <header className="flex h-[var(--header-height)] shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-[var(--header-height)]">
-      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
-        <nav className="text-muted-foreground text-base font-normal flex items-center gap-1">
-          <Link href="/">Home</Link>
-          {breadcrumbs.map((crumb, i) => (
-            <span key={crumb.href} className="flex items-center gap-1">
-              <span className="text-muted-foreground">›</span>
-              <Link
-                href={crumb.href}
-                className="hover:underline hover:text-foreground transition-colors"
-              >
-                {crumb.label}
-              </Link>
-            </span>
-          ))}
-        </nav>
+    <header className="flex h-[var(--header-height)] shrink-0 items-center border-b-4 border-gray-900 bg-white px-4 shadow-[0px_4px_0px_0px_rgba(0,0,0,1)] transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-[var(--header-height)] lg:px-6">
+      <div className="flex w-full items-center justify-between gap-2">
+        {/* Left side: sidebar trigger and breadcrumbs */}
+        <div className="flex items-center gap-3">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="h-6 bg-gray-400" />
+
+          <nav className="flex items-center gap-2 text-sm font-bold text-gray-900">
+            <Link
+              href="/"
+              className="transition-colors hover:text-blue-600 hover:underline"
+            >
+              Home
+            </Link>
+            {breadcrumbs.map((crumb, i) => (
+              <span key={crumb.href} className="flex items-center gap-2">
+                <span className="text-gray-400">›</span>
+                <Link
+                  href={crumb.href}
+                  className="transition-colors hover:text-blue-600 hover:underline"
+                >
+                  {crumb.label}
+                </Link>
+              </span>
+            ))}
+          </nav>
+        </div>
       </div>
     </header>
   );
