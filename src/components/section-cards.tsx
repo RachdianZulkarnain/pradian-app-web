@@ -31,9 +31,9 @@ export function SectionCards() {
             </CardTitle>
             <button onClick={() => setShowRevenue((prev) => !prev)}>
               {showRevenue ? (
-                <EyeOff className="h-5 w-5" />
+                <EyeOff className="ml-2  h-5 w-5" />
               ) : (
-                <Eye className="h-5 w-5" />
+                <Eye className="ml-2 mb-2 h-5 w-5" />
               )}
             </button>
           </div>

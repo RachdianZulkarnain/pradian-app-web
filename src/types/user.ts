@@ -4,7 +4,9 @@ export interface User {
   email: string;
   pictureProfile: string;
   referralCode: string;
+  referralPoints: number;
   role: string;
+  coupon: string;
   createdAt: Date;
   updatedAt: Date;
   accessToken: string;

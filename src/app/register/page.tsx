@@ -43,7 +43,7 @@ const SignUp = () => {
         >
           <Form className="space-y-4">
             <CardHeader>
-              <CardTitle>Register to your account</CardTitle>
+              <CardTitle>Register your account</CardTitle>
               <CardDescription>
                 Enter your details to create your account
               </CardDescription>
@@ -125,13 +125,13 @@ const SignUp = () => {
 
             <div className="text-center text-sm text-gray-400">
               Already have an account?{" "}
-              <Link href="/login" className="text-pink-500 hover:underline">
+              <Link href="/login" className="text-black hover:underline">
                 Login
               </Link>
             </div>
             <div className="text-center text-sm text-gray-400">
               Ready to take the stage?{" "}
-              <Link href="/register/organizer" className="text-pink-500 hover:underline">
+              <Link href="/register/organizer" className="text-black hover:underline">
                 Organize with us.
               </Link>
             </div>

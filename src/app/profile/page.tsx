@@ -1,20 +1,51 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ReferralCodeInput } from "@/components/referral-code-input";
+
 import { useGetProfile } from "./_hooks/useGetProfile";
+import { useUpdateProfile } from "./_hooks/useUpdateProfile";
 
 export default function ProfilePage() {
-  const { data: user, isLoading, isError } = useGetProfile();
+  const { data: profile, isLoading, isError } = useGetProfile();
+  const updateMutation = useUpdateProfile();
+
+  const [name, setName] = useState("");
+  const [pictureProfile, setPictureProfile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (profile) {
+      setName(profile.name);
+    }
+  }, [profile]);
+
+  const handleSubmit = async () => {
+    if (!name.trim()) {
+      toast.error("Name cannot be empty");
+      return;
+    }
+
+    try {
+      await updateMutation.mutateAsync({ name, pictureProfile });
+      setPictureProfile(null); // reset after upload
+    } catch {
+      // error handled in hook
+    }
+  };
 
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto mt-10 flex gap-8">
+      <div className="mx-auto mt-10 flex max-w-4xl gap-8">
         <aside className="w-64 space-y-2">
           <Skeleton className="h-8 w-1/2" />
           <Skeleton className="h-8 w-3/4" />
@@ -29,26 +60,26 @@ export default function ProfilePage() {
     );
   }
 
-  if (isError || !user) {
+  if (isError || !profile) {
     return (
-      <div className="text-center text-red-500 mt-10">
+      <div className="mt-10 text-center text-red-500">
         Failed to load profile. Please try again.
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 flex gap-8">
+    <div className="mx-auto mt-10 flex max-w-4xl gap-8">
       {/* Sidebar */}
       <aside className="w-64 border-r pr-4">
         <nav className="space-y-2">
           <Link href="/profile">
-            <div className={cn("text-sm font-medium px-3 py-2 rounded-md", "bg-muted")}>
+            <div className={cn("rounded-md px-3 py-2 text-sm font-medium", "bg-muted")}>
               Profile
             </div>
           </Link>
           <Link href="/profile/change-password">
-            <div className="text-sm font-medium px-3 py-2 rounded-md hover:bg-muted transition">
+            <div className="hover:bg-muted rounded-md px-3 py-2 text-sm font-medium transition">
               Change Password
             </div>
           </Link>
@@ -57,50 +88,79 @@ export default function ProfilePage() {
 
       {/* Profile Details */}
       <div className="flex-1 space-y-6">
+        {/* Header Section */}
         <div className="flex items-center gap-4">
-          {user.pictureProfile ? (
-            <Image
-              src={user.pictureProfile}
+          <Avatar className="h-20 w-20 border">
+            <AvatarImage
+              src={
+                pictureProfile
+                  ? URL.createObjectURL(pictureProfile)
+                  : profile.pictureProfile || undefined
+              }
               alt="Profile"
-              width={80}
-              height={80}
-              className="rounded-full object-cover"
             />
-          ) : (
-            <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
-              No Image
-            </div>
-          )}
+            <AvatarFallback>{profile.name[0]}</AvatarFallback>
+          </Avatar>
           <div>
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
+            <h2 className="text-xl font-semibold">{profile.name}</h2>
+            <p className="text-muted-foreground text-sm">{profile.email}</p>
           </div>
         </div>
 
-        <div className="grid gap-4 max-w-md">
+        {/* Form Section */}
+        <div className="grid max-w-md gap-4">
+          {/* Editable Full Name */}
           <div>
-            <Label>Name</Label>
-            <Input value={user.name} disabled />
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              disabled={updateMutation.isPending}
+            />
           </div>
+
+          {/* Read-only Email */}
           <div>
             <Label>Email</Label>
-            <Input value={user.email} disabled />
+            <Input value={profile.email} disabled />
           </div>
-          <div>
-            <Label>Referral Code</Label>
-            <Input value={user.referralCode} disabled />
-          </div>
+
+          {/* Referral Code with Copy */}
+          <ReferralCodeInput code={profile.referralCode} />
+
+          {/* Read-only Role */}
           <div>
             <Label>Role</Label>
-            <Input value={user.role} disabled />
+            <Input value={profile.role} disabled />
           </div>
-        </div>
 
-        {/* Edit Button */}
-        <div className="pt-4">
-          <Link href="/profile/edit">
-            <Button className="w-full">Edit Profile</Button>
-          </Link>
+          {/* Read-only Total Points */}
+          <div>
+            <Label>Total Points</Label>
+            <Input value={profile.referralPoints} disabled />
+          </div>
+
+          {/* Profile Picture Upload */}
+          <div>
+            <Label>Profile Picture</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              disabled={updateMutation.isPending}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) setPictureProfile(file);
+              }}
+            />
+
+          </div>
+
+          {/* Save Button */}
+          <Button onClick={handleSubmit} disabled={updateMutation.isPending}>
+            {updateMutation.isPending ? "Saving..." : "Save Changes"}
+          </Button>
         </div>
       </div>
     </div>

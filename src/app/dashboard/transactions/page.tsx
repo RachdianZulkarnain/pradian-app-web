@@ -16,8 +16,8 @@ const TransactionPage = () => {
   if (isError || !data || !data.meta) return <p>Failed to load transactions</p>;
 
   return (
-    <div>
-      <h1 className="mb-4 text-xl font-semibold">Transactions</h1>
+    <div className="space-y-4 p-6">
+      <h1 className="mb-4 text-2xl font-bold">Transactions</h1>
       <DataTable columns={columns} data={data.data} />
 
       {/* 🔁 Replaces the old manual pagination */}

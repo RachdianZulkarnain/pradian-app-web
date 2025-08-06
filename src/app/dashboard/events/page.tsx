@@ -17,8 +17,8 @@ const MyEventsPage = () => {
   if (isError || !data || !data.meta) return <p>Failed to load events</p>;
 
   return (
-    <div>
-      <h1 className="mb-4 text-xl font-semibold">My Events</h1>
+    <div className="y-4 p-6">
+      <h1 className="mb-4 text-2xl font-bold">My Events</h1>
 
       <DataTable columns={columns} data={data.data} />
 
