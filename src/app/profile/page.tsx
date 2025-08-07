@@ -74,12 +74,12 @@ export default function ProfilePage() {
       <aside className="w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <nav className="space-y-2 font-bold text-gray-900 uppercase text-sm">
           <Link href="/profile">
-            <div className="rounded-none border-2 border-gray-900 bg-muted px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-none border-2 border-gray-900 text-white hover:bg-red-400 bg-red-500 px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
               Profile
             </div>
           </Link>
           <Link href="/profile/change-password">
-            <div className="rounded-none border-2 border-gray-900 px-4 py-2 transition-colors hover:bg-muted shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-none border-2 border-gray-900 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
               Change Password
             </div>
           </Link>
