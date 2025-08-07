@@ -25,6 +25,7 @@ import { Event } from "@/types/event";
 import { Ticket } from "@/types/ticket";
 import { Voucher } from "@/types/voucher";
 import { useCreateTransaction } from "../_api/create-transactions";
+import Link from "next/link";
 
 interface EventHeaderProps {
   slug: string;
@@ -293,24 +294,29 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
               </div>
               <hr className="my-4 border-t border-gray-200" />
               <div className="flex items-center gap-3">
-                {event.admin?.pictureProfile ? (
-                  <Image
-                    src={event.admin.pictureProfile}
-                    alt={event.admin.name || "Admin"}
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black">
-                    <span className="text-sm font-bold text-white">
-                      {event.admin?.name?.charAt(0).toUpperCase() || "A"}
-                    </span>
-                  </div>
-                )}
-                <span className="text-sm font-medium text-gray-900">
-                  {event.admin?.name || "Unknown Admin"}
-                </span>
+                <Link
+                  href={`/organizer/${event.admin?.id}`}
+                  className="flex items-center gap-3"
+                >
+                  {event.admin?.pictureProfile ? (
+                    <Image
+                      src={event.admin.pictureProfile}
+                      alt={event.admin.name || "Admin"}
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black">
+                      <span className="text-sm font-bold text-white">
+                        {event.admin?.name?.charAt(0).toUpperCase() || "A"}
+                      </span>
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-gray-900">
+                    {event.admin?.name || "Unknown Admin"}
+                  </span>
+                </Link>
               </div>
             </CardContent>
           </Card>

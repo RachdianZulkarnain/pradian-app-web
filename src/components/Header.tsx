@@ -42,8 +42,8 @@ const Header = () => {
           <Image
             src="/assets/pradian-logo1.png"
             alt="Pradian Logo"
-            width={40}
-            height={40}
+            width={60}
+            height={60}
             className="object-contain"
           />
           <span className="text-xl font-black uppercase tracking-tight text-black">

@@ -11,11 +11,13 @@ export interface Event {
   endDate: Date;
   adminId: number;
   updatedAt: Date;
+
   createdAt: Date;
   tickets?: {
     price: number;
   }[];
   admin?: {
+    id: number;
     name: string;
     pictureProfile?: string;
   };

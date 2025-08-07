@@ -42,17 +42,17 @@ export default function OrderHistory() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "CREATED":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300"; // Menunggu pembayaran
+        return "bg-yellow-100 text-yellow-800 border-yellow-300";
       case "WAITING_FOR_CONFIRMATION":
-        return "bg-blue-100 text-blue-800 border-blue-300"; // Menunggu konfirmasi admin
+        return "bg-blue-100 text-blue-800 border-blue-300";
       case "PAID":
-        return "bg-green-100 text-green-800 border-green-300"; // Berhasil
+        return "bg-green-100 text-green-800 border-green-300";
       case "REJECT":
-        return "bg-red-100 text-red-800 border-red-300"; // Ditolak
+        return "bg-red-100 text-red-800 border-red-300";
       case "EXPIRED":
-        return "bg-gray-100 text-gray-500 border-gray-300"; // Kadaluarsa
+        return "bg-gray-100 text-gray-500 border-gray-300";
       default:
-        return "bg-slate-100 text-slate-700 border-slate-300"; // Status tidak dikenal
+        return "bg-slate-100 text-slate-700 border-slate-300";
     }
   };
 
@@ -60,6 +60,7 @@ export default function OrderHistory() {
     <div className="mx-auto min-h-screen max-w-5xl p-4 sm:p-6">
       <h1 className="mb-6 text-2xl font-bold text-gray-900">Order History</h1>
 
+      {/* Search Input */}
       <div className="relative mb-8 w-full">
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
         <Input
@@ -73,6 +74,7 @@ export default function OrderHistory() {
         />
       </div>
 
+      {/* Orders List */}
       <div className="mb-8 grid gap-4">
         {orders.map((order) => (
           <div
@@ -123,6 +125,7 @@ export default function OrderHistory() {
         ))}
       </div>
 
+      {/* Pagination */}
       <div className="flex flex-wrap justify-center gap-2">
         <Button
           variant="outline"
