@@ -101,7 +101,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
         {/* Left Content */}
         <div className="space-y-6">
           {/* Thumbnail */}
-          <div className="relative aspect-video w-full overflow-hidden rounded-2xl shadow-md">
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
             <Image
               src={event.thumbnail || "/placeholder.png"}
               alt="Event Poster"
@@ -154,13 +154,13 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
               {vouchers.map((voucher) => (
                 <div
                   key={voucher.id}
-                  className="flex w-full max-w-fit items-center justify-between rounded-md border border-orange-200 bg-white px-3 py-2 shadow-sm sm:w-auto"
+                  className="flex w-full max-w-fit items-center justify-between rounded-md border border-black bg-red-500 px-3 py-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:w-auto"
                 >
                   <div className="mr-2 flex flex-col text-left">
-                    <span className="text-sm font-bold text-orange-600">
+                    <span className="text-sm font-bold text-white">
                       {voucher.code}
                     </span>
-                    <span className="text-xs text-gray-700">
+                    <span className="text-xs text-white">
                       Rp {voucher.value.toLocaleString("id-ID")}
                     </span>
                   </div>
@@ -198,7 +198,10 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
                 <p className="text-sm text-gray-500">No tickets available.</p>
               ) : (
                 tickets.map((ticket) => (
-                  <Card key={ticket.id} className="border-orange-200">
+                  <Card
+                    key={ticket.id}
+                    className="border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+                  >
                     <CardContent className="space-y-4 px-4 py-5 sm:p-6">
                       <div className="space-y-1">
                         <h3 className="text-lg font-semibold text-gray-900">
@@ -253,7 +256,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
           </Tabs>
 
           {/* Mobile Checkout */}
-          <Card className="md:hidden">
+          <Card className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:hidden">
             <CardContent className="space-y-4 p-6">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-900">
@@ -277,7 +280,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
 
         {/* Desktop Sidebar */}
         <div className="hidden space-y-6 md:block">
-          <Card>
+          <Card className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
             <CardContent className="space-y-4 p-6">
               <h1 className="text-2xl font-bold text-gray-900">
                 {event.title}
@@ -321,7 +324,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
             <CardContent className="space-y-4 p-6">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-900">
@@ -334,7 +337,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
               <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
                 <DialogTrigger asChild>
                   <Button
-                    className="w-full bg-orange-500 py-3 text-sm font-medium text-white hover:bg-orange-600"
+                    className="w-full bg-blue-500 py-3 text-sm font-medium text-white hover:bg-blue-600"
                     size="lg"
                     disabled={totalPrice === 0}
                   >
@@ -358,7 +361,7 @@ const EventHeader: FC<EventHeaderProps> = ({ slug }) => {
                     </Button>
                     <Button
                       onClick={handleCheckout}
-                      className="bg-orange-500 text-white hover:bg-orange-600"
+                      className="bg-blue-500 text-white hover:bg-orange-600"
                     >
                       Confirm
                     </Button>

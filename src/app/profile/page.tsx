@@ -57,7 +57,7 @@ export default function ProfilePage() {
           <Skeleton className="h-6 w-1/2" />
         </div>
       </div>
-    );
+    );  
   }
 
   if (isError || !profile) {
@@ -69,9 +69,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto mt-10 flex max-w-5xl gap-8 px-4">
+    <div className="mx-auto mt-10 flex flex-col max-w-5xl gap-8 px-4">
       {/* Sidebar */}
-      <aside className="w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+      <aside className="hidden md:block w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <nav className="space-y-2 font-bold text-gray-900 uppercase text-sm">
           <Link href="/profile">
             <div className="rounded-none border-2 border-gray-900 text-white hover:bg-red-400 bg-red-500 px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">

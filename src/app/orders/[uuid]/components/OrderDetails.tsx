@@ -51,193 +51,190 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
       .toLowerCase()
       .replace(/\b\w/g, (char) => char.toUpperCase());
 
-  if (isPending) return <div>Loading...</div>;
-  if (!transaction || !ticket) return <div>Order not found</div>;
+  if (isPending) return <div className="p-10">Loading...</div>;
+  if (!transaction || !ticket)
+    return <div className="p-10">Order not found</div>;
 
   return (
-    <div className="mx-auto min-h-screen max-w-7xl p-4 sm:p-6">
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Left Content */}
+    <div className="mx-auto min-h-screen max-w-7xl px-4 py-10 sm:px-6">
+      <h1 className="mb-6 text-3xl font-black text-gray-900 uppercase">
+        Order Details
+      </h1>
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        {/* Left Section */}
         <div className="space-y-6 lg:col-span-2">
-          <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
-            Order Detail
-          </h1>
-
-          <Card>
-            <CardContent className="space-y-6 p-6">
-              <div className="flex flex-col gap-4 md:flex-row">
-                {!!transaction?.event?.thumbnail && (
-                  <Image
-                    src={transaction.event.thumbnail}
-                    alt="Event Thumbnail"
-                    width={300}
-                    height={200}
-                    className="rounded-lg object-cover"
-                  />
-                )}
-                <div className="flex-1 space-y-2">
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {transaction?.event?.title}
-                  </h2>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="mr-2 h-4 w-4 text-orange-500" />
-                    {transaction?.event?.location}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="mr-2 h-4 w-4 text-orange-500" />
-                    {transaction?.event?.startDate &&
-                      format(
-                        new Date(transaction.event.startDate),
-                        "dd MMM yyyy",
-                      )}{" "}
-                    -{" "}
-                    {transaction?.event?.endDate &&
-                      format(
-                        new Date(transaction.event.endDate),
-                        "dd MMM yyyy",
-                      )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Ticket Info */}
-              <div className="border-t pt-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 font-semibold text-gray-900">
-                      <Ticket className="h-4 w-4 text-orange-500" />
-                      {ticket.ticket.title}
-                    </div>
-                    <p className="text-sm text-gray-600">{ticket.qty} ticket</p>
-                  </div>
-                  <p className="text-right font-bold">Rp {ticket.price}</p>
-                </div>
-              </div>
-
-              {/* Status from backend */}
-              {transaction.status && (
-                <div
-                  className={`rounded p-3 text-sm font-medium ${
-                    transaction.status === "WAITING_FOR_PAYMENT"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : transaction.status === "PAID"
-                        ? "bg-green-100 text-green-800"
-                        : transaction.status === "REJECTED"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  Status: <strong>{formatStatus(transaction.status)}</strong>
-                </div>
+          <div className="rounded-none border-2 border-gray-900 bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex flex-col gap-6 md:flex-row">
+              {transaction?.event?.thumbnail && (
+                <Image
+                  src={transaction.event.thumbnail}
+                  alt="Event"
+                  width={300}
+                  height={200}
+                  className="border border-gray-300 object-cover"
+                />
               )}
-
-              {/* Bank Info */}
-              <div className="space-y-1 text-sm text-gray-700">
-                <p>
-                  <strong>Bank Name:</strong> BCA
-                </p>
-                <p>
-                  <strong>Account Name:</strong> PT Suka Suka
-                </p>
-                <p>
-                  <strong>Account Number:</strong> 123123123
-                </p>
+              <div className="flex-1 space-y-2">
+                <h2 className="text-2xl font-bold tracking-wide text-gray-900 uppercase">
+                  {transaction?.event?.title}
+                </h2>
+                <div className="flex items-center text-sm text-gray-700">
+                  <MapPin className="mr-2 h-4 w-4 text-orange-500" />
+                  {transaction?.event?.location}
+                </div>
+                <div className="flex items-center text-sm text-gray-700">
+                  <Calendar className="mr-2 h-4 w-4 text-orange-500" />
+                  {transaction?.event?.startDate &&
+                    format(
+                      new Date(transaction.event.startDate),
+                      "dd MMM yyyy",
+                    )}{" "}
+                  -{" "}
+                  {transaction?.event?.endDate &&
+                    format(new Date(transaction.event.endDate), "dd MMM yyyy")}
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* Ticket Info */}
+            <div className="mt-6 border-t pt-4 text-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="flex items-center gap-2 font-semibold text-gray-900">
+                    <Ticket className="h-4 w-4 text-orange-500" />
+                    {ticket.ticket.title}
+                  </div>
+                  <p className="text-sm text-gray-600">{ticket.qty} ticket</p>
+                </div>
+                <p className="text-right font-bold">Rp {ticket.price}</p>
+              </div>
+            </div>
+
+            {/* Status Display */}
+            {transaction.status && (
+              <div
+                className={`mt-4 w-fit rounded-none border-2 px-4 py-2 text-sm font-bold tracking-wide uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] ${
+                  transaction.status === "WAITING_FOR_PAYMENT"
+                    ? "border-yellow-400 bg-yellow-100 text-yellow-800"
+                    : transaction.status === "PAID"
+                      ? "border-green-400 bg-green-100 text-green-800"
+                      : transaction.status === "REJECTED"
+                        ? "border-red-400 bg-red-100 text-red-800"
+                        : "border-gray-400 bg-gray-100 text-gray-800"
+                }`}
+              >
+                Status: {formatStatus(transaction.status)}
+              </div>
+            )}
+
+            {/* Bank Info */}
+            <div className="mt-6 space-y-1 text-sm text-gray-700">
+              <p>
+                <strong>Bank Name:</strong> BCA
+              </p>
+              <p>
+                <strong>Account Name:</strong> PT Suka Suka
+              </p>
+              <p>
+                <strong>Account Number:</strong> 123123123
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Right Sidebar */}
+        {/* Right Section */}
         <div className="space-y-6">
-          {/* Voucher */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter voucher code here"
-                  value={voucherCode}
-                  onChange={(e) => setVoucherCode(e.target.value)}
-                />
-                <Button onClick={handleApplyVoucher}>Apply</Button>
-              </div>
-              {errorMessage && (
-                <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
-              )}
-            </CardContent>
-          </Card>
+          {/* Voucher Input */}
+          <div className="rounded-none border-2 border-gray-900 bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Enter voucher code here"
+                className="rounded-none border-2 border-gray-900"
+                value={voucherCode}
+                onChange={(e) => setVoucherCode(e.target.value)}
+              />
+              <Button
+                className="rounded-none border-2 border-gray-900 bg-orange-500 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-orange-600"
+                onClick={handleApplyVoucher}
+              >
+                Apply
+              </Button>
+            </div>
+            {errorMessage && (
+              <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+            )}
+          </div>
 
           {/* Price Summary */}
-          <Card>
-            <CardContent className="space-y-4 p-6">
-              <h3 className="text-lg font-semibold">Detail Price</h3>
-              <div className="flex justify-between text-sm">
-                <span>Total ticket price</span>
-                <span className="font-medium">Rp {ticket.price}</span>
-              </div>
-              <div className="flex justify-between border-t pt-3 font-semibold">
-                <span>Total</span>
-                <span>Rp {total ?? baseTotal}</span>
-              </div>
-              {!showUpload && (
-                <Button
-                  className="w-full bg-orange-500 text-white hover:bg-orange-600"
-                  onClick={() => setShowConfirmModal(true)}
-                >
-                  Pay
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+          <div className="rounded-none border-2 border-gray-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <h3 className="mb-4 text-lg font-semibold">Detail Price</h3>
+            <div className="flex justify-between text-sm">
+              <span>Total ticket price</span>
+              <span className="font-medium">Rp {ticket.price}</span>
+            </div>
+            <div className="flex justify-between border-t pt-3 font-bold">
+              <span>Total</span>
+              <span>Rp {total ?? baseTotal}</span>
+            </div>
+            {!showUpload && (
+              <Button
+                className="mt-6 w-full rounded-none border-2 border-gray-900 bg-orange-500 font-bold text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-orange-600"
+                onClick={() => setShowConfirmModal(true)}
+              >
+                Pay
+              </Button>
+            )}
+          </div>
 
           {/* Upload Payment Proof */}
           {showUpload && (
-            <Card>
-              <CardContent className="space-y-4 p-4">
-                <p className="text-sm font-semibold text-gray-700">
-                  Upload Payment Proof
-                </p>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setPaymentProof(file);
-                      setPreviewImage(URL.createObjectURL(file));
-                    }
-                  }}
+            <div className="rounded-none border-2 border-gray-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <p className="mb-2 text-sm font-semibold text-gray-700">
+                Upload Payment Proof
+              </p>
+              <Input
+                type="file"
+                accept="image/*"
+                className="rounded-none border-2 border-gray-900"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setPaymentProof(file);
+                    setPreviewImage(URL.createObjectURL(file));
+                  }
+                }}
+              />
+              {previewImage && (
+                <Image
+                  src={previewImage}
+                  alt="Preview"
+                  width={300}
+                  height={200}
+                  className="mt-4 border border-gray-300"
                 />
-                {!!previewImage && (
-                  <Image
-                    src={previewImage}
-                    alt="Preview"
-                    width={300}
-                    height={200}
-                    className="rounded-lg border"
-                  />
-                )}
-                <Button
-                  disabled={!paymentProof || isUploading}
-                  onClick={async () => {
-                    if (!paymentProof) return;
-                    await uploadProof({ paymentProof });
-                    setShowUpload(false);
-                    toast.success("Payment proof uploaded successfully!");
-                  }}
-                  className="bg-green-600 text-white hover:bg-green-700"
-                >
-                  {isUploading ? "Uploading..." : "Submit Payment Proof"}
-                </Button>
-              </CardContent>
-            </Card>
+              )}
+              <Button
+                disabled={!paymentProof || isUploading}
+                onClick={async () => {
+                  if (!paymentProof) return;
+                  await uploadProof({ paymentProof });
+                  setShowUpload(false);
+                  toast.success("Payment proof uploaded successfully!");
+                }}
+                className="mt-4 w-full rounded-none border-2 border-gray-900 bg-green-600 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-green-700"
+              >
+                {isUploading ? "Uploading..." : "Submit Payment Proof"}
+              </Button>
+            </div>
           )}
         </div>
       </div>
 
       {/* Confirm Modal */}
       {showConfirmModal && (
-        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
-          <div className="pointer-events-auto w-[90%] max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black/20">
+          <div className="pointer-events-auto w-[90%] max-w-md rounded-none border-2 border-gray-900 bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <h2 className="mb-2 text-lg font-bold">Confirm Transaction</h2>
             <p className="mb-4 text-sm text-gray-600">
               Are you sure you want to proceed with this transaction? This
@@ -246,18 +243,17 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"
+                className="rounded-none border-2 border-gray-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 onClick={() => setShowConfirmModal(false)}
               >
                 Cancel
               </Button>
               <Button
-                className="bg-orange-500 text-white hover:bg-orange-600"
+                className="rounded-none border-2 border-gray-900 bg-orange-500 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-orange-600"
                 onClick={() => {
                   setShowUpload(true);
                   setShowConfirmModal(false);
-                  toast.info(
-                    "Waiting for payment. Please upload your payment proof.",
-                  );
+                  toast.info("Waiting for payment. Please upload your proof.");
                 }}
               >
                 Confirm

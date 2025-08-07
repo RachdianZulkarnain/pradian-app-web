@@ -20,7 +20,7 @@ const socials = [
 
 export default function FooterSection() {
   return (
-    <footer className="mt-16 border-t-4 border-black bg-white shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+    <footer >
       <div className="container mx-auto px-6 py-12 md:py-20">
         {/* Top Grid */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">

@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
 import {
   Search,
   MapPin,
@@ -12,7 +15,7 @@ import {
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
-import Image from "next/image";
+
 import { getOrders, Order } from "../_api/get-orders";
 
 export default function OrderHistory() {
@@ -57,15 +60,21 @@ export default function OrderHistory() {
   };
 
   return (
-    <div className="mx-auto min-h-screen max-w-5xl p-4 sm:p-6">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">Order History</h1>
+    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      {/* Header */}
+      <div className="mb-10 text-center">
+        <h1 className="text-3xl font-black text-gray-900 sm:text-4xl">
+          ORDER HISTORY
+        </h1>
+        <div className="mx-auto mt-2 h-1 w-16 bg-red-500" />
+      </div>
 
-      {/* Search Input */}
-      <div className="relative mb-8 w-full">
-        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+      {/* Search */}
+      <div className="relative mx-auto mb-10 w-full max-w-xl">
+        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           placeholder="Search event title"
-          className="w-full max-w-md rounded-md border-gray-200 bg-white pl-10 shadow-sm"
+          className="w-full rounded-md border-2 border-gray-900 bg-white py-3 pr-4 pl-10 font-medium shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] placeholder:text-gray-400 focus:border-blue-600 focus:ring-0"
           value={searchQuery}
           onChange={(e) => {
             setCurrentPage(1);
@@ -74,42 +83,43 @@ export default function OrderHistory() {
         />
       </div>
 
-      {/* Orders List */}
-      <div className="mb-8 grid gap-4">
+      {/* Orders */}
+      <section className="mb-10 grid gap-6">
         {orders.map((order) => (
           <div
             key={order.uuid}
-            className="cursor-pointer rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
             onClick={() => router.push(`/orders/${order.uuid}`)}
+            className="cursor-pointer rounded-md border-2 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-transform hover:translate-x-1 hover:translate-y-1"
           >
-            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
-              <div className="mb-4 sm:mb-0 sm:w-[180px]">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+              {/* Image */}
+              <div className="w-full flex-shrink-0 sm:w-[180px]">
                 <Image
                   src={order.image || "/placeholder.svg"}
                   alt={order.title}
                   width={180}
                   height={120}
-                  className="h-[120px] w-full rounded-md object-cover"
+                  className="h-[120px] w-full rounded border border-gray-300 object-cover"
                 />
               </div>
 
+              {/* Info */}
               <div className="flex-1 space-y-2">
-                <h3 className="truncate text-lg font-semibold text-gray-900">
+                <h3 className="truncate text-lg font-bold tracking-wide text-gray-900 uppercase">
                   {order.title}
                 </h3>
-
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-700">
                   <MapPin className="mr-2 h-4 w-4 text-orange-500" />
                   {order.location}
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-700">
                   <Calendar className="mr-2 h-4 w-4 text-orange-500" />
                   {order.dateRange}
                 </div>
 
                 <Badge
                   variant="outline"
-                  className={`mt-2 w-fit text-xs font-medium ${getStatusColor(
+                  className={`mt-2 w-fit border text-xs font-semibold tracking-wide uppercase ${getStatusColor(
                     order.status,
                   )}`}
                 >
@@ -117,13 +127,14 @@ export default function OrderHistory() {
                 </Badge>
               </div>
 
-              <div className="mt-3 sm:mt-0 sm:self-center">
+              {/* Arrow */}
+              <div className="self-end sm:self-center">
                 <ChevronRight className="h-5 w-5 text-gray-400" />
               </div>
             </div>
           </div>
         ))}
-      </div>
+      </section>
 
       {/* Pagination */}
       <div className="flex flex-wrap justify-center gap-2">
@@ -132,24 +143,25 @@ export default function OrderHistory() {
           size="sm"
           onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
           disabled={currentPage === 1}
+          className="rounded-md border-2 border-gray-900 text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-100"
         >
-          <ChevronLeft className="mr-1 h-4 w-4" />
-          Previous
+          <ChevronLeft className="mr-1 h-4 w-4" /> Prev
         </Button>
 
         {Array.from({ length: totalPages }).map((_, index) => {
           const page = index + 1;
+          const isActive = currentPage === page;
           return (
             <Button
               key={page}
-              variant={currentPage === page ? "default" : "outline"}
               size="sm"
               onClick={() => setCurrentPage(page)}
-              className={
-                currentPage === page
-                  ? "border-orange-500 bg-orange-500 text-white hover:bg-orange-600"
-                  : ""
-              }
+              className={`rounded-md border-2 text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+                isActive
+                  ? "border-gray-900 bg-orange-500 text-white hover:bg-orange-600"
+                  : "border-gray-900 text-gray-800 hover:bg-gray-100"
+              }`}
+              variant="outline"
             >
               {page}
             </Button>
@@ -163,11 +175,11 @@ export default function OrderHistory() {
             setCurrentPage((prev) => Math.min(totalPages, prev + 1))
           }
           disabled={currentPage === totalPages}
+          className="rounded-md border-2 border-gray-900 text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-100"
         >
-          Next
-          <ChevronRight className="ml-1 h-4 w-4" />
+          Next <ChevronRight className="ml-1 h-4 w-4" />
         </Button>
       </div>
-    </div>
+    </main>
   );
 }

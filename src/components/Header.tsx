@@ -35,7 +35,7 @@ const Header = () => {
   if (hidePaths.includes(pathName)) return null;
 
   return (
-    <header className="top-0 z-50 border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden rounded-2xl">
+    <header className="top-0 z-50 overflow-hidden rounded-2xl border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
       <div className="container mx-auto flex items-center justify-between px-4 py-4">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
@@ -46,7 +46,7 @@ const Header = () => {
             height={60}
             className="object-contain"
           />
-          <span className="text-xl font-black uppercase tracking-tight text-black">
+          <span className="text-xl font-black tracking-tight text-black uppercase">
             Pradian<span className="text-red-600">Event</span>
           </span>
         </Link>
@@ -75,7 +75,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden rounded border-2 border-black p-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+          className="rounded border-2 border-black p-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
@@ -89,7 +89,7 @@ const Header = () => {
 
       {/* Mobile Dropdown */}
       {mobileMenuOpen && (
-        <div className="absolute right-4 top-[72px] z-50 w-60 rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hidden">
+        <div className="absolute top-[72px] right-4 z-50 w-60 rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hidden">
           <div className="border-b border-black px-4 py-3">
             <p className="text-sm font-bold text-black">Menu</p>
             <p className="text-xs text-gray-600">
@@ -117,16 +117,34 @@ const Header = () => {
                 </Link>
               </>
             ) : (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  signOut({ callbackUrl: "/" });
-                }}
-                className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
-              >
-                <LogOut className="h-4 w-4 text-black" />
-                Sign Out
-              </button>
+              <>
+                <Link
+                  href="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
+                >
+                  <UserPlus className="h-4 w-4 text-black" />
+                  Profile
+                </Link>
+                <Link
+                  href="/profile/change-password"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
+                >
+                  <Menu className="h-4 w-4 text-black" />
+                  Change Password
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    signOut({ callbackUrl: "/" });
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium hover:bg-gray-100"
+                >
+                  <LogOut className="h-4 w-4 text-black" />
+                  Sign Out
+                </button>
+              </>
             )}
           </div>
         </div>
