@@ -33,12 +33,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
   const ticket = transaction?.transactionDetail?.[0];
   const baseTotal = (ticket?.qty ?? 0) * (ticket?.price ?? 0);
 
-  useEffect(() => {
-    if (transaction) {
-      toast.success("Checkout success!");
-    }
-  }, [transaction]);
-
   const handleApplyVoucher = async () => {
     try {
       setErrorMessage("");
