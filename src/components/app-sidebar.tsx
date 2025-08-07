@@ -123,7 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   height={50}
                   className="object-contain"
                 />
-                <span className="text-xl font-black uppercase text-black">
+                <span className="text- font-black uppercase text-black">
                   Pradian
                   <span className="text-red-600">Event</span>
                 </span>
