@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { CalendarIcon, Trash } from "lucide-react";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
 
@@ -14,9 +14,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 
 import { DateRange } from "react-day-picker";
@@ -99,7 +99,6 @@ const EditEventPage = () => {
           <Form className="space-y-10">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               <div className="space-y-6">
-                {/* Title */}
                 <div className="space-y-1">
                   <Label>Title *</Label>
                   <Field name="title" as={Input} />
@@ -110,7 +109,6 @@ const EditEventPage = () => {
                   />
                 </div>
 
-                {/* Category */}
                 <div className="space-y-1">
                   <Label>Category *</Label>
                   <Field
@@ -133,7 +131,6 @@ const EditEventPage = () => {
                   />
                 </div>
 
-                {/* Location */}
                 <div className="space-y-1">
                   <Label>Location *</Label>
                   <Field
@@ -157,7 +154,6 @@ const EditEventPage = () => {
                   />
                 </div>
 
-                {/* Date Range */}
                 <div className="space-y-1">
                   <Label>Date Range *</Label>
                   <Popover>
@@ -197,7 +193,6 @@ const EditEventPage = () => {
                 </div>
               </div>
 
-              {/* Thumbnail + Description */}
               <div className="space-y-6">
                 <div className="space-y-1">
                   <Label>Thumbnail *</Label>

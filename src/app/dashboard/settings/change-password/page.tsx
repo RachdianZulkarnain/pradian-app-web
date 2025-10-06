@@ -55,11 +55,10 @@ const ChangePasswordPage = () => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-6">
-                {/* CURRENT PASSWORD */}
                 <div className="space-y-2">
                   <Label
                     htmlFor="oldPassword"
-                    className="text-sm font-bold uppercase text-gray-900"
+                    className="text-sm font-bold text-gray-900 uppercase"
                   >
                     Current Password
                   </Label>
@@ -77,11 +76,10 @@ const ChangePasswordPage = () => {
                   />
                 </div>
 
-                {/* NEW PASSWORD */}
                 <div className="space-y-2">
                   <Label
                     htmlFor="newPassword"
-                    className="text-sm font-bold uppercase text-gray-900"
+                    className="text-sm font-bold text-gray-900 uppercase"
                   >
                     New Password
                   </Label>
@@ -99,11 +97,10 @@ const ChangePasswordPage = () => {
                   />
                 </div>
 
-                {/* CONFIRM PASSWORD */}
                 <div className="space-y-2">
                   <Label
                     htmlFor="confirmPassword"
-                    className="text-sm font-bold uppercase text-gray-900"
+                    className="text-sm font-bold text-gray-900 uppercase"
                   >
                     Confirm Password
                   </Label>
@@ -125,7 +122,7 @@ const ChangePasswordPage = () => {
             <CardFooter className="flex-col gap-2 px-6 pb-6">
               <Button
                 type="submit"
-                className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold uppercase tracking-wide text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold tracking-wide text-white uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 disabled={isPending}
               >
                 {isPending ? (

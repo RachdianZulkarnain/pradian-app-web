@@ -29,7 +29,6 @@ export function NavMain({ items }: { items: NavItem[] }) {
               <Disclosure key={item.title}>
                 {({ open }) => (
                   <div>
-                    {/* Parent with toggle */}
                     <SidebarMenuItem className="bg-gray-100 rounded-md border border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
                       <div className="flex w-full items-center justify-between">
                         <Link href={item.url || "#"} className="flex-1">
@@ -54,7 +53,6 @@ export function NavMain({ items }: { items: NavItem[] }) {
                       </div>
                     </SidebarMenuItem>
 
-                    {/* Children */}
                     <Disclosure.Panel className="ml-4 mt-1 border-l-2 border-black pl-3 space-y-1">
                       {item.children?.map((child) => (
                         <SidebarMenuItem

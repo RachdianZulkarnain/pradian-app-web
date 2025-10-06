@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
+import { ReferralCodeInput } from "@/components/referral-code-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ReferralCodeInput } from "@/components/referral-code-input";
 
 import { useGetProfile } from "./_hooks/useGetProfile";
 import { useUpdateProfile } from "./_hooks/useUpdateProfile";
@@ -38,9 +36,7 @@ export default function ProfilePage() {
     try {
       await updateMutation.mutateAsync({ name, pictureProfile });
       setPictureProfile(null);
-    } catch {
-      // error handled in hook
-    }
+    } catch {}
   };
 
   if (isLoading) {
@@ -57,7 +53,7 @@ export default function ProfilePage() {
           <Skeleton className="h-6 w-1/2" />
         </div>
       </div>
-    );  
+    );
   }
 
   if (isError || !profile) {
@@ -69,26 +65,23 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto mt-10 flex flex-col max-w-5xl gap-8 px-4">
-      {/* Sidebar */}
-      <aside className="hidden md:block w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-        <nav className="space-y-2 font-bold text-gray-900 uppercase text-sm">
+    <div className="mx-auto mt-10 flex max-w-5xl flex-col gap-8 px-4">
+      <aside className="hidden w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:block">
+        <nav className="space-y-2 text-sm font-bold text-gray-900 uppercase">
           <Link href="/profile">
-            <div className="rounded-none border-2 border-gray-900 text-white hover:bg-red-400 bg-red-500 px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-none border-2 border-gray-900 bg-red-500 px-4 py-2 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-red-400">
               Profile
             </div>
           </Link>
           <Link href="/profile/change-password">
-            <div className="rounded-none border-2 border-gray-900 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-none border-2 border-gray-900 bg-blue-500 px-4 py-2 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-blue-400">
               Change Password
             </div>
           </Link>
         </nav>
       </aside>
 
-      {/* Profile Details */}
       <div className="flex-1 space-y-8 border-4 border-gray-900 bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-        {/* Header Section */}
         <div className="flex items-center gap-4">
           <Avatar className="h-20 w-20 border-2 border-gray-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
             <AvatarImage
@@ -104,18 +97,12 @@ export default function ProfilePage() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-xl font-black text-gray-900">
-              {profile.name}
-            </h2>
-            <p className="text-sm font-medium text-gray-500">
-              {profile.email}
-            </p>
+            <h2 className="text-xl font-black text-gray-900">{profile.name}</h2>
+            <p className="text-sm font-medium text-gray-500">{profile.email}</p>
           </div>
         </div>
 
-        {/* Form Section */}
         <div className="grid max-w-md gap-6">
-          {/* Editable Full Name */}
           <div className="space-y-2">
             <Label className="text-sm font-bold text-gray-900 uppercase">
               Full Name
@@ -129,7 +116,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Read-only Email */}
           <div className="space-y-2">
             <Label className="text-sm font-bold text-gray-900 uppercase">
               Email
@@ -141,10 +127,8 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Referral Code */}
           <ReferralCodeInput code={profile.referralCode} />
 
-          {/* Read-only Role */}
           <div className="space-y-2">
             <Label className="text-sm font-bold text-gray-900 uppercase">
               Role
@@ -156,7 +140,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Read-only Total Points */}
           <div className="space-y-2">
             <Label className="text-sm font-bold text-gray-900 uppercase">
               Total Points
@@ -168,7 +151,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Profile Picture Upload */}
           <div className="space-y-2">
             <Label className="text-sm font-bold text-gray-900 uppercase">
               Profile Picture
@@ -185,11 +167,10 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Save Button */}
           <Button
             onClick={handleSubmit}
             disabled={updateMutation.isPending}
-            className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold uppercase tracking-wide text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold tracking-wide text-white uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
           >
             {updateMutation.isPending ? "Saving..." : "Save Changes"}
           </Button>

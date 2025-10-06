@@ -1,8 +1,7 @@
-// src/hooks/useGetBankDetails.ts
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 type BankDetails = {
@@ -24,7 +23,7 @@ export const useGetBankDetails = () => {
           headers: {
             Authorization: `Bearer ${session.data?.user.accessToken}`,
           },
-        }
+        },
       );
       return data;
     },

@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 
 export const useEvents = () => {
   return useQuery({

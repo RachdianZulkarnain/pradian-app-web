@@ -4,9 +4,8 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
-  PaginationPrevious,
+  PaginationPrevious
 } from "@/components/ui/pagination";
 import { PaginationMeta } from "@/types/pagination";
 
@@ -39,7 +38,7 @@ const PaginationSection = ({ meta, setPage }: PaginationSectionProps) => {
           </PaginationItem>
 
           <PaginationItem>
-            <span className="text-sm text-muted-foreground font-medium">
+            <span className="text-muted-foreground text-sm font-medium">
               Page {page} of {totalPages}
             </span>
           </PaginationItem>
@@ -47,7 +46,9 @@ const PaginationSection = ({ meta, setPage }: PaginationSectionProps) => {
           <PaginationItem>
             <PaginationNext
               onClick={handleNext}
-              className={page >= totalPages ? "cursor-not-allowed opacity-50" : ""}
+              className={
+                page >= totalPages ? "cursor-not-allowed opacity-50" : ""
+              }
             />
           </PaginationItem>
         </PaginationContent>

@@ -20,13 +20,11 @@ const socials = [
 
 export default function FooterSection() {
   return (
-    <footer >
+    <footer>
       <div className="container mx-auto px-6 py-12 md:py-20">
-        {/* Top Grid */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
-          {/* Logo + About */}
           <div>
-            <Link href="/" aria-label="Go home" className="inline-block mb-4">
+            <Link href="/" aria-label="Go home" className="mb-4 inline-block">
               <Image
                 src="/assets/pradian-logo1.png"
                 alt="Pradian Logo"
@@ -35,12 +33,8 @@ export default function FooterSection() {
                 className="object-contain"
               />
             </Link>
-            <p className="text-sm text-gray-600 max-w-sm">
-              Pradian empowers communities to create, manage, and explore events easily. From concerts to conferences, discover what moves you.
-            </p>
           </div>
 
-          {/* Quick Links 1 */}
           <div>
             <h4 className="mb-4 font-semibold text-black">Company</h4>
             <ul className="space-y-2 text-sm text-gray-700">
@@ -54,7 +48,6 @@ export default function FooterSection() {
             </ul>
           </div>
 
-          {/* Quick Links 2 */}
           <div>
             <h4 className="mb-4 font-semibold text-black">Resources</h4>
             <ul className="space-y-2 text-sm text-gray-700">
@@ -68,7 +61,6 @@ export default function FooterSection() {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div>
             <h4 className="mb-4 font-semibold text-black">Contact Us</h4>
             <ul className="space-y-2 text-sm text-gray-700">
@@ -79,18 +71,15 @@ export default function FooterSection() {
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="my-8 border-t-2 border-black" />
+        <div className="my-8 border-t border-black" />
 
-        {/* Bottom Row */}
         <div className="flex flex-col-reverse items-center justify-between gap-6 md:flex-row">
-          {/* Copyright */}
           <p className="text-center text-sm text-gray-600 md:text-left">
             © {new Date().getFullYear()}{" "}
-            <span className="font-semibold text-black">Pradian</span>. All rights reserved.
+            <span className="font-semibold text-black">Pradian</span>. All
+            rights reserved.
           </p>
 
-          {/* Social Media */}
           <div className="flex gap-6">
             {socials.map((social, index) => (
               <Link
@@ -115,7 +104,6 @@ export default function FooterSection() {
         </div>
       </div>
 
-      {/* SVG ICONS */}
       <svg style={{ display: "none" }}>
         <symbol id="icon-linkedin" viewBox="0 0 24 24">
           <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z" />

@@ -22,7 +22,6 @@ export function SiteHeader() {
   return (
     <header className="flex h-[var(--header-height)] shrink-0 items-center border-b-4 border-gray-900 bg-white px-4 shadow-[0px_4px_0px_0px_rgba(0,0,0,1)] transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-[var(--header-height)] lg:px-6">
       <div className="flex w-full items-center justify-between gap-2">
-        {/* Left side: sidebar trigger and breadcrumbs */}
         <div className="flex items-center gap-3">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="h-6 bg-gray-400" />

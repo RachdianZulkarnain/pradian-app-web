@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import {
-  Search,
-  MapPin,
   Calendar,
-  ChevronRight,
   ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Search,
 } from "lucide-react";
 
 import { getOrders, Order } from "../_api/get-orders";
@@ -61,7 +60,6 @@ export default function OrderHistory() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      {/* Header */}
       <div className="mb-10 text-center">
         <h1 className="text-3xl font-black text-gray-900 sm:text-4xl">
           ORDER HISTORY
@@ -69,7 +67,6 @@ export default function OrderHistory() {
         <div className="mx-auto mt-2 h-1 w-16 bg-red-500" />
       </div>
 
-      {/* Search */}
       <div className="relative mx-auto mb-10 w-full max-w-xl">
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
@@ -83,7 +80,6 @@ export default function OrderHistory() {
         />
       </div>
 
-      {/* Orders */}
       <section className="mb-10 grid gap-6">
         {orders.map((order) => (
           <div
@@ -92,7 +88,6 @@ export default function OrderHistory() {
             className="cursor-pointer rounded-md border-2 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-transform hover:translate-x-1 hover:translate-y-1"
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-              {/* Image */}
               <div className="w-full flex-shrink-0 sm:w-[180px]">
                 <Image
                   src={order.image || "/placeholder.svg"}
@@ -103,7 +98,6 @@ export default function OrderHistory() {
                 />
               </div>
 
-              {/* Info */}
               <div className="flex-1 space-y-2">
                 <h3 className="truncate text-lg font-bold tracking-wide text-gray-900 uppercase">
                   {order.title}
@@ -127,7 +121,6 @@ export default function OrderHistory() {
                 </Badge>
               </div>
 
-              {/* Arrow */}
               <div className="self-end sm:self-center">
                 <ChevronRight className="h-5 w-5 text-gray-400" />
               </div>
@@ -136,7 +129,6 @@ export default function OrderHistory() {
         ))}
       </section>
 
-      {/* Pagination */}
       <div className="flex flex-wrap justify-center gap-2">
         <Button
           variant="outline"

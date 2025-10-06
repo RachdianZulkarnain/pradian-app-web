@@ -1,10 +1,9 @@
-// app/(dashboard)/tickets/columns.tsx
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { ArrowUpDown } from "lucide-react";
 
 export type TicketRow = {
   id: number;

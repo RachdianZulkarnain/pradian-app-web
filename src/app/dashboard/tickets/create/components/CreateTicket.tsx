@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import useCreateTicket from "../_hooks/useCreateTicket";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { axiosInstance } from "@/lib/axios";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
+import useCreateTicket from "../_hooks/useCreateTicket";
 
 interface TicketFormValues {
   title: string;
@@ -40,7 +40,7 @@ const CreateTicket = () => {
     const fetchEvents = async () => {
       try {
         const res = await axiosInstance.get("/events");
-        setEvents(res.data.data); // assuming response has { data: Event[] }
+        setEvents(res.data.data);
       } catch (error) {
         console.error("Failed to fetch events", error);
       } finally {
@@ -78,7 +78,6 @@ const CreateTicket = () => {
         {() => (
           <Form className="space-y-10">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              {/* Left */}
               <div className="space-y-6">
                 <div className="space-y-1">
                   <Label htmlFor="title">Title *</Label>
@@ -123,7 +122,6 @@ const CreateTicket = () => {
                 </div>
               </div>
 
-              {/* Right */}
               <div className="space-y-6">
                 <div className="space-y-1">
                   <Label htmlFor="event">Event *</Label>
@@ -168,7 +166,6 @@ const CreateTicket = () => {
               </div>
             </div>
 
-            {/* Submit */}
             <div className="flex justify-end">
               <Button
                 type="submit"

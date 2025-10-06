@@ -1,8 +1,7 @@
-// src/hooks/useUpsertBankDetails.ts
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
@@ -18,15 +17,11 @@ export const useUpsertBankDetails = () => {
 
   return useMutation({
     mutationFn: async (payload: UpsertPayload) => {
-      const { data } = await axiosInstance.post(
-        "/bank-details",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${session.data?.user.accessToken}`,
-          },
-        }
-      );
+      const { data } = await axiosInstance.post("/bank-details", payload, {
+        headers: {
+          Authorization: `Bearer ${session.data?.user.accessToken}`,
+        },
+      });
       return data;
     },
     onSuccess: () => {
@@ -35,7 +30,7 @@ export const useUpsertBankDetails = () => {
     },
     onError: (error: any) => {
       toast.error(
-        error?.response?.data?.message || "Failed to save bank details"
+        error?.response?.data?.message || "Failed to save bank details",
       );
     },
   });

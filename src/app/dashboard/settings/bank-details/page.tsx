@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -11,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetBankDetails } from "./_hooks/useGetBankDetails";
@@ -46,7 +46,6 @@ export default function BankDetailsPage() {
         Manage your bank details settings.
       </p>
 
-      {/* Bank Name */}
       <div className="mb-5">
         <Label>Bank Name</Label>
         {isLoading ? (
@@ -70,7 +69,6 @@ export default function BankDetailsPage() {
         </p>
       </div>
 
-      {/* Account Name */}
       <div className="mb-5">
         <Label>Account Name</Label>
         {isLoading ? (
@@ -88,7 +86,6 @@ export default function BankDetailsPage() {
         </p>
       </div>
 
-      {/* Account Number */}
       <div className="mb-5">
         <Label>Account Number</Label>
         {isLoading ? (

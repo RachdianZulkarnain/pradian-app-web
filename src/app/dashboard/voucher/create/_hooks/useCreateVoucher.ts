@@ -1,7 +1,7 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -11,14 +11,14 @@ const useCreateVoucher = () => {
 
   return useMutation({
     mutationFn: async (data: FormData) => {
-      const token = localStorage.getItem("token"); // ambil token dari localStorage
+      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
 
       const response = await axiosInstance.post("/vouchers", data, {
         headers: {
-          Authorization: `Bearer ${token}`, // kirim token ke backend
+          Authorization: `Bearer ${token}`,
         },
       });
 

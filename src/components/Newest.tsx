@@ -23,11 +23,11 @@ const NewestEvents = () => {
     <section className="container mx-auto mt-12 px-4 md:px-12 lg:px-24">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-3xl font-bold text-black">
-          Newest <span className="text-red-600">Events</span>
+          Newest <span>Events</span>
         </h3>
         <Link
           href="/events"
-          className="text-sm font-semibold text-red-600 hover:underline"
+          className="text-sm font-semibold hover:underline"
         >
           See all
         </Link>
@@ -38,7 +38,7 @@ const NewestEvents = () => {
           ? Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="space-y-3 rounded-xl border-4 border-black bg-white p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+                className="space-y-3 rounded-xl bg-white p-4 shadow-md"
               >
                 <Skeleton className="aspect-[4/3] w-full rounded-lg" />
                 <Skeleton className="h-5 w-3/4" />
@@ -55,9 +55,9 @@ const NewestEvents = () => {
               return (
                 <div
                   key={event.id}
-                  className="overflow-hidden rounded-xl border-4 border-black bg-white shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)]"
+                  className="overflow-hidden rounded-xl bg-white shadow-md transition-all hover:-translate-y-1 hover:shadow-xl"
                 >
-                  <div className="relative aspect-[4/3] w-full rounded-b-none">
+                  <div className="relative aspect-[4/3] w-full">
                     <Link
                       href={`/events/${event.slug}`}
                       className="absolute inset-0 z-10"
@@ -66,7 +66,7 @@ const NewestEvents = () => {
                       src={event.thumbnail || "/placeholder.jpg"}
                       alt={event.title}
                       fill
-                      className="rounded-t-[8px] object-cover"
+                      className="rounded-t-xl object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
@@ -85,8 +85,8 @@ const NewestEvents = () => {
                       {lowestPrice === 0
                         ? "Gratis"
                         : lowestPrice !== null
-                        ? `Rp ${formatPrice(lowestPrice)}`
-                        : "Belum tersedia"}
+                          ? `Rp ${formatPrice(lowestPrice)}`
+                          : "Belum tersedia"}
                     </p>
                   </div>
                 </div>

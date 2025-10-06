@@ -21,7 +21,6 @@ export default function VoucherPage() {
 
       <DataTable columns={columns} data={data.data} />
 
-      {/* ✅ Use the reusable pagination component */}
       <PaginationSection meta={data.meta} setPage={setPage} />
     </div>
   );

@@ -1,12 +1,13 @@
-// columns.tsx
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowUpDown } from "lucide-react";
-import * as Yup from "yup";
-import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,19 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { InferType } from "yup";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useUpdateTransaction } from "./_hooks/useUpdateTransactions";
-import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
+import * as Yup from "yup";
+import { InferType } from "yup";
+import { useUpdateTransaction } from "./_hooks/useUpdateTransactions";
 
-// Yup schema for a transaction row
 const transactionSchema = Yup.object({
   uuid: Yup.string().uuid("Invalid UUID format").required("UUID is required"),
   eventName: Yup.string().required(),
@@ -54,7 +50,6 @@ type TransactionStatus =
   | "REJECT"
   | "EXPIRED";
 
-// Infer the type from Yup schema
 export type TransactionRow = InferType<typeof transactionSchema>;
 
 export const columns: ColumnDef<TransactionRow>[] = [
@@ -179,7 +174,6 @@ export const columns: ColumnDef<TransactionRow>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-              {/* View Payment Proof */}
               <DialogTrigger asChild>
                 <DropdownMenuItem
                   disabled={!transaction.paymentProof}
@@ -191,7 +185,6 @@ export const columns: ColumnDef<TransactionRow>[] = [
 
               <DropdownMenuSeparator />
 
-              {/* Accept Payment */}
               <DropdownMenuItem
                 disabled={isPending}
                 onClick={() =>
@@ -218,7 +211,6 @@ export const columns: ColumnDef<TransactionRow>[] = [
                 Accept Payment
               </DropdownMenuItem>
 
-              {/* Reject Payment */}
               <DropdownMenuItem
                 disabled={isPending}
                 onClick={() =>
@@ -246,7 +238,6 @@ export const columns: ColumnDef<TransactionRow>[] = [
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* Payment Proof Dialog */}
           <DialogTitle>
             <DialogContent className="max-w-md">
               {transaction.paymentProof ? (

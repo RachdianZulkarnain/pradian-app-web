@@ -1,18 +1,16 @@
-// columns.tsx
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
 
-// Type definition
 export type VoucherRow = {
   code: string;
   value: number;
   stock: number;
   eventTitle: string;
-  createdAt: string; // ISO string
+  createdAt: string;
 };
 
 export const columns: ColumnDef<VoucherRow>[] = [

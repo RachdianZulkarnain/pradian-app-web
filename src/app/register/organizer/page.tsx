@@ -49,7 +49,6 @@ const SignUp = () => {
 
             <CardContent>
               <div className="flex flex-col gap-6">
-                {/* Name */}
                 <div className="grid gap-2">
                   <Label htmlFor="name">Name</Label>
                   <Field
@@ -65,7 +64,6 @@ const SignUp = () => {
                   />
                 </div>
 
-                {/* Email */}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Field
@@ -81,7 +79,6 @@ const SignUp = () => {
                   />
                 </div>
 
-                {/* Password */}
                 <div className="grid gap-2">
                   <Label htmlFor="password">Password</Label>
                   <Field

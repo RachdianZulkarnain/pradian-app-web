@@ -7,8 +7,8 @@ import { toast } from "sonner";
 
 interface TicketPayload {
   title: string;
-  event: string; 
-  price: number; 
+  event: string;
+  price: number;
   limit: number;
   description: string;
 }
@@ -23,8 +23,8 @@ const useCreateTicket = () => {
       const form = new FormData();
       form.append("title", payload.title);
       form.append("event", payload.event);
-      form.append("price", String(payload.price)); // convert to string
-      form.append("limit", String(payload.limit)); // convert to string
+      form.append("price", String(payload.price));
+      form.append("limit", String(payload.limit));
       form.append("description", payload.description);
 
       const response = await axiosInstance.post("/tickets", form, {

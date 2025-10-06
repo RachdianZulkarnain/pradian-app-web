@@ -1,8 +1,5 @@
 "use client";
 
-import { useGetProfile } from "../_hooks/useGetProfile";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,11 +12,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { Loader } from "lucide-react";
-import useChangePassword from "./_hooks/useChangePassword";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Loader } from "lucide-react";
+import Link from "next/link";
+import * as Yup from "yup";
+import { useGetProfile } from "../_hooks/useGetProfile";
+import useChangePassword from "./_hooks/useChangePassword";
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required("Current Password is required").min(6),
@@ -58,26 +57,23 @@ const ChangePasswordPage = () => {
   }
 
   return (
-    <div className="mx-auto mt-10 flex flex-col md:flex-row max-w-5xl gap-8 px-4">
-      {/* Sidebar */}
-      <aside className="hidden md:block w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-        <nav className="space-y-2 font-bold text-gray-900 uppercase text-sm">
+    <div className="mx-auto mt-10 flex max-w-5xl flex-col gap-8 px-4 md:flex-row">
+      <aside className="hidden w-64 border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:block">
+        <nav className="space-y-2 text-sm font-bold text-gray-900 uppercase">
           <Link href="/profile">
-            <div className="rounded-none border-2 border-gray-900 px-4 py-2 text-white bg-blue-500 hover:bg-blue-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-none border-2 border-gray-900 bg-blue-500 px-4 py-2 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-blue-400">
               Profile
             </div>
           </Link>
           <Link href="/profile/change-password">
-            <div className="rounded-none border-2 border-gray-900 bg-red-500 hover:bg-red-400 text-white px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-none border-2 border-gray-900 bg-red-500 px-4 py-2 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-red-400">
               Change Password
             </div>
           </Link>
         </nav>
       </aside>
 
-      {/* Change Password Form */}
       <div className="flex-1 space-y-6 border-4 border-gray-900 bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-        {/* Header */}
         <div className="flex items-center gap-4">
           <Avatar className="h-20 w-20 border-2 border-gray-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
             <AvatarImage
@@ -94,7 +90,6 @@ const ChangePasswordPage = () => {
           </div>
         </div>
 
-        {/* Form Card */}
         <Card className="max-w-md border-4 border-gray-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
           <Formik
             initialValues={{
@@ -121,9 +116,8 @@ const ChangePasswordPage = () => {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Old Password */}
                 <div className="grid gap-2">
-                  <Label className="text-sm font-bold uppercase text-gray-900">
+                  <Label className="text-sm font-bold text-gray-900 uppercase">
                     Current Password
                   </Label>
                   <Field
@@ -140,9 +134,8 @@ const ChangePasswordPage = () => {
                   />
                 </div>
 
-                {/* New Password */}
                 <div className="grid gap-2">
-                  <Label className="text-sm font-bold uppercase text-gray-900">
+                  <Label className="text-sm font-bold text-gray-900 uppercase">
                     New Password
                   </Label>
                   <Field
@@ -159,9 +152,8 @@ const ChangePasswordPage = () => {
                   />
                 </div>
 
-                {/* Confirm Password */}
                 <div className="grid gap-2">
-                  <Label className="text-sm font-bold uppercase text-gray-900">
+                  <Label className="text-sm font-bold text-gray-900 uppercase">
                     Confirm Password
                   </Label>
                   <Field
@@ -183,7 +175,7 @@ const ChangePasswordPage = () => {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold uppercase tracking-wide text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                  className="h-14 w-full transform rounded-none border-2 border-gray-900 bg-blue-600 text-lg font-bold tracking-wide text-white uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-blue-700 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 >
                   {isPending ? <Loader className="animate-spin" /> : "Submit"}
                 </Button>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useCreateVoucher from "../_hooks/useCreateVoucher";
 import { useEvents } from "../_hooks/useEvents";
@@ -76,7 +76,6 @@ const CreateVoucher = () => {
 
       <form onSubmit={handleSubmit} className="space-y-10">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {/* Left column */}
           <div className="space-y-6">
             <div className="space-y-1">
               <Label htmlFor="event">Event *</Label>
@@ -135,7 +134,6 @@ const CreateVoucher = () => {
             </div>
           </div>
 
-          {/* Right column */}
           <div className="space-y-6">
             <div className="space-y-1">
               <Label htmlFor="value">Value *</Label>
@@ -165,7 +163,6 @@ const CreateVoucher = () => {
           </div>
         </div>
 
-        {/* Submit button */}
         <div className="flex justify-end">
           <Button
             type="submit"

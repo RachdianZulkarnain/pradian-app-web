@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useUpdateProfileAdmin } from "./_hooks/useUpdateProfileAdmin";
 import { useGetDashboardProfile } from "./_hooks/useGetDashboardProfile";
+import { useUpdateProfileAdmin } from "./_hooks/useUpdateProfileAdmin";
 
 const ProfilePage = () => {
   const { data: profile, isLoading } = useGetDashboardProfile();
@@ -31,10 +31,8 @@ const ProfilePage = () => {
 
     try {
       await updateMutation.mutateAsync({ name, pictureProfile });
-      setPictureProfile(null); // reset uploaded picture state
-    } catch {
-      // error handled in hook
-    }
+      setPictureProfile(null);
+    } catch {}
   };
 
   if (isLoading) {

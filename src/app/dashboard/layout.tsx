@@ -17,16 +17,16 @@ export default function DashboardLayout({
           } as React.CSSProperties
         }
       >
-        {/* Sidebar with bold style */}
-        <AppSidebar variant="inset" className="border-r-4 border-gray-900 shadow-[6px_0px_0px_0px_rgba(0,0,0,1)] bg-white" />
+        <AppSidebar
+          variant="inset"
+          className="border-r-4 border-gray-900 bg-white shadow-[6px_0px_0px_0px_rgba(0,0,0,1)]"
+        />
 
-        <SidebarInset className="flex flex-col min-h-screen">
-          {/* Header with consistent styling */}
-          <SiteHeader  />
+        <SidebarInset className="flex min-h-screen flex-col">
+          <SiteHeader />
 
-          {/* Main Content with padding and styling */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-gray-50">
-            <div className="rounded-md border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-4 sm:p-6">
+          <main className="flex-1 bg-gray-50 p-4 sm:p-6 lg:p-8">
+            <div className="rounded-md border-4 border-gray-900 bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-6">
               {children}
             </div>
           </main>

@@ -48,7 +48,6 @@ const ResetPasswordPage: FC<ResetPasswordPageProps> = ({ token }) => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-6">
-                {/* PASSWORD */}
                 <div className="grid gap-2">
                   <Label htmlFor="password">Password</Label>
                   <Field
@@ -64,7 +63,6 @@ const ResetPasswordPage: FC<ResetPasswordPageProps> = ({ token }) => {
                   />
                 </div>
 
-                {/* CONFIRM PASSWORD */}
                 <div className="grid gap-2">
                   <Label htmlFor="password">Confirm Password</Label>
                   <Field

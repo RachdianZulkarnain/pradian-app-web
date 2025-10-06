@@ -1,12 +1,12 @@
 "use client";
 
-import { Menu, X, LogIn, UserPlus, LogOut } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { LogIn, LogOut, Menu, UserPlus, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
 import AccountMenu from "./profile-dropdown";
 
 const Header = () => {
@@ -14,7 +14,6 @@ const Header = () => {
   const pathName = usePathname();
   const { data: session } = useSession();
 
-  // Hide navbar on dashboard pages
   const hidePaths = [
     "/login",
     "/register",
@@ -35,15 +34,14 @@ const Header = () => {
   if (hidePaths.includes(pathName)) return null;
 
   return (
-    <header className="top-0 z-50 overflow-hidden rounded-2xl border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+    <header className="top-0 z-50 bg-white shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-4">
-        {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/assets/pradian-logo1.png"
             alt="Pradian Logo"
-            width={60}
-            height={60}
+            width={80}
+            height={80}
             className="object-contain"
           />
           <span className="text-xl font-black tracking-tight text-black uppercase">
@@ -51,31 +49,23 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
         <div className="hidden items-center space-x-2 md:flex">
           {session ? (
             <AccountMenu email={session.user?.email} points={0} />
           ) : (
             <>
-              <Button
-                variant="default"
-                className="rounded-none border-2 border-black bg-blue-600 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-blue-700"
-              >
-                <Link href="/login">Login</Link>
+              <Button className="rounded-3xl bg-blue-600 text-white hover:bg-blue-700">
+                <Link href="/register">Sign Up</Link>
               </Button>
-              <Button
-                variant="default"
-                className="rounded-none border-2 border-black bg-green-600 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-green-700"
-              >
-                <Link href="/register">Sign-Up</Link>
+              <Button className="rounded-3xl bg-blue-600 text-white hover:bg-blue-700">
+                <Link href="/login">Sign in</Link>
               </Button>
             </>
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
-          className="rounded border-2 border-black p-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:hidden"
+          className="p-2 md:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
@@ -87,16 +77,15 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
       {mobileMenuOpen && (
-        <div className="absolute top-[72px] right-4 z-50 w-60 rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hidden">
-          <div className="border-b border-black px-4 py-3">
+        <div className="absolute top-20 right-4 z-50 w-60 rounded-lg bg-white shadow-lg md:hidden">
+          <div className="border-b px-4 py-3">
             <p className="text-sm font-bold text-black">Menu</p>
             <p className="text-xs text-gray-600">
               {session ? session.user?.email : "Not logged in"}
             </p>
           </div>
-          <div className="flex flex-col divide-y divide-black">
+          <div className="flex flex-col divide-y">
             {!session ? (
               <>
                 <Link

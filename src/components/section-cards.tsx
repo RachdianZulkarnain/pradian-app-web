@@ -1,14 +1,14 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useGetAnalytics } from "@/app/dashboard/_hooks/useGetAnalytics";
 import {
   Card,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { useGetAnalytics } from "@/app/dashboard/_hooks/useGetAnalytics";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 export function SectionCards() {
   const [showRevenue, setShowRevenue] = useState(false);
@@ -19,10 +19,9 @@ export function SectionCards() {
 
   return (
     <div className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
-      {/* Total Revenue */}
       <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader className="flex flex-col gap-2">
-          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+          <CardDescription className="text-sm font-bold text-gray-600 uppercase">
             Total Revenue
           </CardDescription>
           <div className="flex items-center justify-between">
@@ -36,19 +35,18 @@ export function SectionCards() {
               className="text-gray-600 transition-colors hover:text-blue-600"
             >
               {showRevenue ? (
-                <EyeOff className="h-5 ml-2 w-5" />
+                <EyeOff className="ml-2 h-5 w-5" />
               ) : (
-                <Eye className="h-5 ml-2 w-5" />
+                <Eye className="ml-2 h-5 w-5" />
               )}
             </button>
           </div>
         </CardHeader>
       </Card>
 
-      {/* Total Events */}
       <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader>
-          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+          <CardDescription className="text-sm font-bold text-gray-600 uppercase">
             Total Events
           </CardDescription>
           <CardTitle className="text-3xl font-black tracking-wide text-gray-900">
@@ -57,10 +55,9 @@ export function SectionCards() {
         </CardHeader>
       </Card>
 
-      {/* Total Tickets */}
       <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader>
-          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+          <CardDescription className="text-sm font-bold text-gray-600 uppercase">
             Total Tickets
           </CardDescription>
           <CardTitle className="text-3xl font-black tracking-wide text-gray-900">
@@ -69,10 +66,9 @@ export function SectionCards() {
         </CardHeader>
       </Card>
 
-      {/* Total Vouchers */}
       <Card className="border-4 border-gray-900 bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <CardHeader>
-          <CardDescription className="text-sm font-bold uppercase text-gray-600">
+          <CardDescription className="text-sm font-bold text-gray-600 uppercase">
             Total Vouchers
           </CardDescription>
           <CardTitle className="text-3xl font-black tracking-wide text-gray-900">

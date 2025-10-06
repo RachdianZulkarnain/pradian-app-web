@@ -3,7 +3,7 @@
 import {
   IconDotsVertical,
   IconLogout,
-  IconUserCircle
+  IconUserCircle,
 } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -88,7 +88,9 @@ export function NavUser({
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={()=> signOut({ callbackUrl: "/login"})}>
+            <DropdownMenuItem
+              onClick={() => signOut({ callbackUrl: "/login" })}
+            >
               <IconLogout />
               Log out
             </DropdownMenuItem>

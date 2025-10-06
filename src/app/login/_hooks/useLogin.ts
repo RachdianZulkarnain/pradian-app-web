@@ -20,8 +20,7 @@ const useLogin = () => {
     mutationFn: async (payload: Payload) => {
       const { data } = await axiosInstance.post<User>("auth/login", payload);
 
-      // Simpan token ke localStorage setelah login sukses
-      localStorage.setItem("token", data.accessToken); // pastikan token memang dikembalikan dari endpoint login
+      localStorage.setItem("token", data.accessToken);
 
       return data;
     },

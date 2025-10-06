@@ -19,5 +19,5 @@ export const applyVoucher = async (
     throw new Error(error?.message || "Failed to apply voucher");
   }
 
-  return await res.json(); // { pricing: { totalTicketPrice, total } }
+  return await res.json();
 };

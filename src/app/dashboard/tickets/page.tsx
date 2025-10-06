@@ -1,10 +1,10 @@
 "use client";
 
 import { DataTable } from "@/components/data-table";
+import PaginationSection from "@/components/PaginationSection";
 import { useState } from "react";
 import { useGetTickets } from "./_hooks/useGetTickets";
 import { columns } from "./columns";
-import PaginationSection from "@/components/PaginationSection";
 
 export default function TicketPage() {
   const [page, setPage] = useState(1);
@@ -24,7 +24,6 @@ export default function TicketPage() {
 
       <DataTable columns={columns} data={data.data} />
 
-      {/* ✅ Use custom pagination component */}
       <PaginationSection meta={data.meta} setPage={setPage} />
     </div>
   );

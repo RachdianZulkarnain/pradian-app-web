@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { CategoryFilter } from "@/components/CategoryFilter";
+import PaginationSection from "@/components/PaginationSection";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -10,12 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
-import PaginationSection from "@/components/PaginationSection";
 import useGetEvents from "../hooks/useGetEvents";
 import EventCard from "./EventCard";
 import EventCardSkeleton from "./EventCardSkeleton";
-import { CategoryFilter } from "@/components/CategoryFilter";
 
 const EventList = () => {
   const searchParams = useSearchParams();
@@ -28,7 +28,6 @@ const EventList = () => {
 
   const [debounceSearch] = useDebounceValue(search, 500);
 
-  // Sync filters from URL on mount
   useEffect(() => {
     const urlCategory = searchParams.get("category");
     const urlLocation = searchParams.get("location");
@@ -41,7 +40,6 @@ const EventList = () => {
     if (urlPage) setPage(parseInt(urlPage));
   }, [searchParams]);
 
-  // Update URL params on filter/page change
   useEffect(() => {
     const params = new URLSearchParams();
 
@@ -54,7 +52,6 @@ const EventList = () => {
     router.replace(`/events${query ? `?${query}` : ""}`);
   }, [category, location, search, page, router]);
 
-  // Get events
   const { data: events, isPending } = useGetEvents({
     page,
     search: debounceSearch,

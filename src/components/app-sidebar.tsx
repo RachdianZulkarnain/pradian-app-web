@@ -2,14 +2,15 @@
 
 import {
   IconDashboard,
-  IconListDetails,
-  IconTicket,
   IconDiscount2,
+  IconListDetails,
   IconReceipt2,
   IconSettings,
+  IconTicket,
 } from "@tabler/icons-react";
 import * as React from "react";
 
+import { useGetDashboardProfile } from "@/app/dashboard/settings/_hooks/useGetDashboardProfile";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -23,7 +24,6 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetDashboardProfile } from "@/app/dashboard/settings/_hooks/useGetDashboardProfile";
 
 const data = {
   navMain: [
@@ -107,7 +107,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className="border-r-4 border-gray-900 bg-white shadow-[6px_0_0_0_rgba(0,0,0,1)]"
       {...props}
     >
-      {/* Header with Logo */}
       <SidebarHeader className="border-b-4 border-gray-900 px-4 py-3">
         <SidebarMenu>
           <SidebarMenuItem>
@@ -123,7 +122,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   height={50}
                   className="object-contain"
                 />
-                <span className="text- font-black uppercase text-black">
+                <span className="text- font-black text-black uppercase">
                   Pradian
                   <span className="text-red-600">Event</span>
                 </span>
@@ -133,12 +132,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
 
-      {/* Navigation */}
       <SidebarContent className="px-3 py-4">
         <NavMain items={data.navMain} />
       </SidebarContent>
 
-      {/* Footer with User Info */}
       <SidebarFooter className="border-t-4 border-gray-900 px-3 py-4">
         <NavUser user={user} />
       </SidebarFooter>

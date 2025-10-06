@@ -21,22 +21,22 @@ const Category = () => {
   return (
     <section className="container mx-auto px-4 py-10 md:px-12 lg:px-24">
       <h3 className="mb-8 text-3xl font-bold text-black">
-        Category <span className="text-red-600">Event</span>
+        Category <span>Event</span>
       </h3>
 
-      <div className="grid grid-cols-3 gap-6 md:flex md:snap-x md:snap-mandatory md:justify-center md:gap-12 md:overflow-x-auto md:pb-4">
+      <div className="grid grid-cols-3 gap-6 md:flex md:snap-x md:snap-mandatory md:justify-center md:gap-35 md:overflow-x-auto md:pb-4">
         {categories.map((category) => {
           const Icon = category.icon;
           return (
             <div
               key={category.value}
-              className="flex snap-start flex-col mt-2 items-center text-center md:min-w-[100px]"
+              className="mt-2 flex snap-start flex-col items-center text-center md:min-w-[100px]"
             >
               <Link href={`/events?category=${category.value}`}>
-                <div className="mb-3 flex h-[100px] w-[100px] items-center justify-center rounded-xl border-4 border-black bg-white shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-transform hover:scale-105">
+                <div className="mb-3 flex h-[100px] w-[100px] items-center justify-center rounded-full bg-white shadow-md transition-all hover:scale-105 hover:shadow-lg">
                   <Icon size={36} className="text-black" />
                 </div>
-                <span className="text-sm font-semibold text-black">
+                <span className="text-lg font-semibold text-black">
                   {category.label}
                 </span>
               </Link>

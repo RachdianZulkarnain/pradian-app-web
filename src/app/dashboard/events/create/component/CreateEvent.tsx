@@ -1,23 +1,23 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import Image from "next/image";
-import { Trash, CalendarIcon } from "lucide-react";
+import TiptapRichtextEditor from "@/components/TiptapRichtextEditor";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import TiptapRichtextEditor from "@/components/TiptapRichtextEditor";
-import useCreateEvent from "../_hooks/useCreateEvent";
-import { DateRange } from "react-day-picker";
-import { format } from "date-fns";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { CalendarIcon, Trash } from "lucide-react";
+import Image from "next/image";
+import { ChangeEvent, useState } from "react";
+import { DateRange } from "react-day-picker";
+import * as Yup from "yup";
+import useCreateEvent from "../_hooks/useCreateEvent";
 
 interface FormValues {
   title: string;
@@ -194,7 +194,6 @@ const CreateEvent = () => {
                 </div>
               </div>
 
-              {/* Right Section */}
               <div className="space-y-6">
                 <div className="space-y-1">
                   <Label htmlFor="thumbnail">Thumbnail *</Label>

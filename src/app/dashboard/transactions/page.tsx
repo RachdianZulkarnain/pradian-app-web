@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { columns } from "./columns";
 import { DataTable } from "@/components/data-table";
-import { useGetAdminTransactions } from "./_hooks/useGetTransactions";
 import PaginationSection from "@/components/PaginationSection";
+import { useState } from "react";
+import { useGetAdminTransactions } from "./_hooks/useGetTransactions";
+import { columns } from "./columns";
 
 const TransactionPage = () => {
   const [page, setPage] = useState(1);
@@ -20,7 +20,6 @@ const TransactionPage = () => {
       <h1 className="mb-4 text-2xl font-bold">Transactions</h1>
       <DataTable columns={columns} data={data.data} />
 
-      {/* 🔁 Replaces the old manual pagination */}
       <PaginationSection meta={data.meta} setPage={setPage} />
     </div>
   );

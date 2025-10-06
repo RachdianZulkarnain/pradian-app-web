@@ -15,7 +15,6 @@ export const useOrderDetails = (uuid: string) => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  // Fetch transaction detail by UUID
   useEffect(() => {
     const fetchOrder = async () => {
       if (!uuid || !token) return;
@@ -43,7 +42,6 @@ export const useOrderDetails = (uuid: string) => {
     fetchOrder();
   }, [uuid]);
 
-  // Apply voucher
   const handleApplyVoucher = async () => {
     try {
       if (!voucherCode) throw new Error("Please enter a voucher code");
@@ -62,8 +60,6 @@ export const useOrderDetails = (uuid: string) => {
     }
   };
 
-
-  // Confirm payment method
   const handlePay = async () => {
     try {
       const res = await fetch(`${API}/transactions/${uuid}/pay`, {
@@ -90,7 +86,6 @@ export const useOrderDetails = (uuid: string) => {
     }
   };
 
-  // Upload payment proof
   const handleUploadProof = async (file: File) => {
     const formData = new FormData();
     formData.append("paymentProof", file);

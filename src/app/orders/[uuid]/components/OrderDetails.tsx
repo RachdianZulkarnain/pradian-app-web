@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { MapPin, Calendar, Ticket } from "lucide-react";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import { Calendar, MapPin, Ticket } from "lucide-react";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 import useGetTransaction from "../../_hooks/useGetTransaction";
 import useUploadPaymentProof from "../../_hooks/useUploadPaymentProof";
 import { applyVoucher } from "../_api/voucher";
-import { format } from "date-fns";
-import { toast } from "sonner";
 
 type OrderDetailsProps = {
   uuid: string;
@@ -62,7 +61,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
       </h1>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Left Section */}
         <div className="space-y-6 lg:col-span-2">
           <div className="rounded-none border-2 border-gray-900 bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex flex-col gap-6 md:flex-row">
@@ -97,7 +95,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
               </div>
             </div>
 
-            {/* Ticket Info */}
             <div className="mt-6 border-t pt-4 text-sm">
               <div className="flex items-start justify-between">
                 <div>
@@ -111,7 +108,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
               </div>
             </div>
 
-            {/* Status Display */}
             {transaction.status && (
               <div
                 className={`mt-4 w-fit rounded-none border-2 px-4 py-2 text-sm font-bold tracking-wide uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] ${
@@ -128,7 +124,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
               </div>
             )}
 
-            {/* Bank Info */}
             <div className="mt-6 space-y-1 text-sm text-gray-700">
               <p>
                 <strong>Bank Name:</strong> BCA
@@ -143,9 +138,7 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
           </div>
         </div>
 
-        {/* Right Section */}
         <div className="space-y-6">
-          {/* Voucher Input */}
           <div className="rounded-none border-2 border-gray-900 bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex gap-2">
               <Input
@@ -166,7 +159,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
             )}
           </div>
 
-          {/* Price Summary */}
           <div className="rounded-none border-2 border-gray-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <h3 className="mb-4 text-lg font-semibold">Detail Price</h3>
             <div className="flex justify-between text-sm">
@@ -187,7 +179,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
             )}
           </div>
 
-          {/* Upload Payment Proof */}
           {showUpload && (
             <div className="rounded-none border-2 border-gray-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <p className="mb-2 text-sm font-semibold text-gray-700">
@@ -231,7 +222,6 @@ export default function OrderDetails({ uuid }: OrderDetailsProps) {
         </div>
       </div>
 
-      {/* Confirm Modal */}
       {showConfirmModal && (
         <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black/20">
           <div className="pointer-events-auto w-[90%] max-w-md rounded-none border-2 border-gray-900 bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">

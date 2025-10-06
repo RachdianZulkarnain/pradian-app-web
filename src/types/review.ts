@@ -2,7 +2,7 @@ export interface Review {
   id: number;
   comment: string;
   rating: number;
-  createdAt: string; // ISO string dari Date
+  createdAt: string; 
   updatedAt: string;
   deletedAt: string | null;
   userId: number;

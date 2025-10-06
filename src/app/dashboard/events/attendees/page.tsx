@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { attendeeColumns } from "./columns"; // your AttendeeColumnDef
-import useGetAttendees from "./_hooks/useGetAttendees";
 import { DataTable } from "@/components/data-table";
 import PaginationSection from "@/components/PaginationSection";
+import { useState } from "react";
+import useGetAttendees from "./_hooks/useGetAttendees";
+import { attendeeColumns } from "./columns";
 
 const AttendeesPage = () => {
   const [page, setPage] = useState(1);
